@@ -26,7 +26,7 @@
     .hero {
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
       color: #fff;
-      padding: 40px 20px 36px;
+      padding: 40px 20px 44px;
       text-align: center;
     }
     .hero-badge {
@@ -54,7 +54,7 @@
     }
     .container {
       max-width: 1080px;
-      margin: -24px auto 60px;
+      margin: -28px auto 60px;
       padding: 0 16px;
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
@@ -72,6 +72,11 @@
       box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.07);
       margin-bottom: 20px;
     }
+    .panel.sample-highlight {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+      border: 2px solid #93c5fd;
+      box-shadow: 0 15px 35px -10px rgba(37, 99, 235, 0.15);
+    }
     .panel h2 {
       margin: 0 0 12px;
       font-size: 18px;
@@ -79,6 +84,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .step-badge {
       background: #dbeafe;
@@ -86,6 +92,47 @@
       font-size: 12px;
       font-weight: 800;
       padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .step-badge.amber {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    .sample-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 15px 24px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.45);
+      transition: transform 0.12s, box-shadow 0.15s;
+    }
+    .sample-cta-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px -5px rgba(37, 99, 235, 0.55);
+    }
+    .sample-cta-btn:active { transform: scale(0.99); }
+    .sample-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .sample-chip {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 10px;
       border-radius: 999px;
     }
     .method-tabs {
@@ -186,6 +233,9 @@
       gap: 10px;
       margin-top: 12px;
     }
+    @media (max-width: 540px) {
+      .feature-grid { grid-template-columns: 1fr; }
+    }
     .feature-item {
       background: #f8fafc;
       border: 1px solid var(--border);
@@ -219,7 +269,7 @@
     .sim-phone {
       width: 100%;
       max-width: 390px;
-      height: 740px;
+      height: 750px;
       background: #f8fafc;
       border-radius: 32px;
       border: 8px solid #1e293b;
@@ -240,6 +290,43 @@
       font-weight: 700;
       text-align: center;
     }
+    /* Fullscreen Sample Overlay (Portal-only) */
+    .portal-sample-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483640;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .portal-sample-overlay.open {
+      display: flex;
+    }
+    .portal-sample-frame {
+      width: 100%;
+      max-width: 430px;
+      height: min(92vh, 880px);
+      background: #f8fafc;
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 8px #1e293b;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    @media (max-width: 600px) {
+      .portal-sample-overlay { padding: 0; }
+      .portal-sample-frame {
+        max-width: 100%;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -251,8 +338,29 @@
   </header>
 
   <main class="container">
-    <!-- Left Column: Setup & Distribution -->
+    <!-- Left Column: Sample First, Setup Second -->
     <div>
+      <!-- STEP 0: Try Live Sample Immediately -->
+      <section class="panel sample-highlight">
+        <h2>
+          <span class="step-badge amber">まずは体験</span>
+          導入前にサンプルデータで実際の画面を試せます
+        </h2>
+        <p style="margin: 0 0 14px; font-size: 13.5px; color: #334155;">
+          ジョブカンにログインしていなくても、下のボタンを押すと<strong>本番そっくりのサンプルデータ（未承認の打刻・休暇申請、打刻エラー、本日の勤務状況、マイ出勤簿）</strong>が入った状態でフルスクリーンUIを起動・操作できます。
+        </p>
+        <button class="sample-cta-btn" onclick="openSampleOverlay()">
+          <span>📱 ジョブカンスマホUI サンプルを全画面で起動する</span>
+        </button>
+        <div class="sample-points">
+          <span class="sample-chip">✅ ワンタップ承認・却下の体験</span>
+          <span class="sample-chip">🔍 出入詳細モーダル表示</span>
+          <span class="sample-chip">⚠️ エラー絞り込み</span>
+          <span class="sample-chip">👥 本日の勤務状況＆マイ出勤簿</span>
+        </div>
+      </section>
+
+      <!-- STEP 1: Installation Methods -->
       <section class="panel">
         <h2><span class="step-badge">導入方法</span> 使い方に合わせて2通りから選べます</h2>
 
@@ -272,10 +380,11 @@
           <div class="cta-box" style="text-align:center;">
             <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:10px;">
               💻 PCの方は下の青いボタンを「ブックマークバー」へドラッグ＆ドロップ！<br>
-              📱 スマホの方は「コードをコピー」してお気に入りURLに登録してください。
+              📱 スマホの方は「コードをコピー」してお気に入りURLに登録してください。<br>
+              <span style="font-size:11px; color:#2563eb;">（※このページ上でクリックするとサンプル画面が開きます）</span>
             </div>
             <div style="margin: 14px 0;">
-              <a id="bookmarklet-link" class="bookmarklet-drag" href="#">📱 ジョブカンスマホUI</a>
+              <a id="bookmarklet-link" class="bookmarklet-drag" href="#" onclick="if(location.hostname!=='ssl.jobcan.jp'){event.preventDefault();openSampleOverlay();}">📱 ジョブカンスマホUI</a>
             </div>
             <button class="btn dark" onclick="copyBookmarklet()">📋 スマホ登録用ブックマークレット（URL）をコピー</button>
             <div class="toast-copy" id="copy-toast">✅ コピーしました！ブラウザのブックマークURL欄に貼り付けてください。</div>
@@ -342,22 +451,31 @@
       </section>
     </div>
 
-    <!-- Right Column: Static Screen Preview -->
+    <!-- Right Column: Interactive Inline Simulator with Rich Sample Data -->
     <div class="sim-wrap">
-      <div class="sim-label">👇 スマホ画面プレビュー（表示イメージ）</div>
+      <div class="sim-label">👇 そのまま触れるスマホ画面サンプル（全タブ操作可）</div>
       <div class="sim-phone" id="demo-phone-container"></div>
     </div>
   </main>
 
-  <!-- Core Embedded Script Source -->
+  <!-- Portal-only Fullscreen Sample Overlay Container -->
+  <div class="portal-sample-overlay" id="portal-sample-overlay" onclick="if(event.target.id==='portal-sample-overlay')closeSampleOverlay()">
+    <div class="portal-sample-frame" id="overlay-phone-container"></div>
+  </div>
+
+  <!-- Core Embedded Script Source (Production-only, 100% synchronized with jobcan-mobile.user.js) -->
   <script id="jobcan-core-script" type="text/plain">
 (function() {
   'use strict';
+
+  // 既に起動している場合はトグルまたは再表示
   const existing = document.getElementById('jbc-mobile-root');
   if (existing) {
     existing.classList.remove('jbc-minimized');
     return;
   }
+
+  // スマホ用 viewport 設定の補完
   let viewport = document.querySelector('meta[name="viewport"]');
   if (!viewport) {
     viewport = document.createElement('meta');
@@ -365,66 +483,365 @@
     viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
     document.head.appendChild(viewport);
   }
+
   const isClientPage = location.pathname.startsWith('/client');
+
   const style = document.createElement('style');
   style.id = 'jbc-mobile-style';
   style.textContent = `
-    #jbc-mobile-root { position: fixed; inset: 0; z-index: 2147483640; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; color: #0f172a; box-sizing: border-box; padding: 12px; }
-    #jbc-mobile-root * { box-sizing: border-box; }
-    #jbc-mobile-root.jbc-minimized { inset: auto 16px 16px auto; background: transparent; backdrop-filter: none; padding: 0; }
-    .jbc-phone-frame { width: 100%; max-width: 430px; height: min(92vh, 880px); background: #f8fafc; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 8px #1e293b; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-    @media (max-width: 600px) { #jbc-mobile-root { padding: 0; } .jbc-phone-frame { max-width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; } }
+    #jbc-mobile-root {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483640;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+      color: #0f172a;
+      box-sizing: border-box;
+      padding: 12px;
+    }
+    #jbc-mobile-root * {
+      box-sizing: border-box;
+    }
+    #jbc-mobile-root.jbc-minimized {
+      inset: auto 16px 16px auto;
+      background: transparent;
+      backdrop-filter: none;
+      padding: 0;
+    }
+    .jbc-phone-frame {
+      width: 100%;
+      max-width: 430px;
+      height: min(92vh, 880px);
+      background: #f8fafc;
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 8px #1e293b;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    @media (max-width: 600px) {
+      #jbc-mobile-root { padding: 0; }
+      .jbc-phone-frame {
+        max-width: 100%;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
     #jbc-mobile-root.jbc-minimized .jbc-phone-frame { display: none; }
-    .jbc-fab { display: none; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; border-radius: 999px; padding: 14px 22px; font-size: 15px; font-weight: 700; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5); cursor: pointer; align-items: center; gap: 8px; }
+    .jbc-fab {
+      display: none;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+      cursor: pointer;
+      align-items: center;
+      gap: 8px;
+    }
     #jbc-mobile-root.jbc-minimized .jbc-fab { display: inline-flex; }
-    .jbc-header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; padding: 15px 16px 13px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .jbc-header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #fff;
+      padding: 15px 16px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
     .jbc-header-left { display: flex; flex-direction: column; gap: 2px; }
-    .jbc-header-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 7px; }
-    .jbc-badge-live { background: #10b981; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px; }
+    .jbc-header-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .jbc-badge-live {
+      background: #10b981;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
     .jbc-header-sub { font-size: 11px; color: #94a3b8; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .jbc-header-actions { display: flex; gap: 6px; }
-    .jbc-icon-btn { background: rgba(255, 255, 255, 0.12); color: #fff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 7px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-    .jbc-kpi-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px 12px; background: #fff; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
-    .jbc-kpi-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 7px 4px; text-align: center; cursor: pointer; }
-    .jbc-kpi-card.active { border-color: #2563eb; background: #eff6ff; }
+    .jbc-icon-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .jbc-kpi-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 10px 12px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .jbc-kpi-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 7px 4px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .jbc-kpi-card.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
     .jbc-kpi-num { font-size: 16px; font-weight: 800; line-height: 1.15; }
-    .jbc-kpi-num.danger { color: #dc2626; } .jbc-kpi-num.warn { color: #d97706; } .jbc-kpi-num.primary { color: #2563eb; } .jbc-kpi-num.success { color: #059669; }
+    .jbc-kpi-num.danger { color: #dc2626; }
+    .jbc-kpi-num.warn { color: #d97706; }
+    .jbc-kpi-num.primary { color: #2563eb; }
+    .jbc-kpi-num.success { color: #059669; }
     .jbc-kpi-label { font-size: 10px; font-weight: 600; color: #64748b; margin-top: 2px; }
-    .jbc-content { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch; }
-    .jbc-sec-head { display: flex; align-items: center; justify-content: space-between; margin: 4px 2px 2px; }
-    .jbc-sec-title { font-size: 13px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px; }
-    .jbc-sec-count { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #e2e8f0; color: #475569; }
-    .jbc-card { background: #fff; border-radius: 14px; padding: 13px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 9px; }
-    .jbc-card.urgent { border-left: 4px solid #2563eb; } .jbc-card.alert-unmatch { border-left: 4px solid #ef4444; } .jbc-card.alert-night { border-left: 4px solid #f59e0b; }
-    .jbc-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-    .jbc-staff-name { font-size: 14px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 6px; }
+    .jbc-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .jbc-sec-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 4px 2px 2px;
+    }
+    .jbc-sec-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .jbc-sec-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .jbc-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .jbc-card.urgent { border-left: 4px solid #2563eb; }
+    .jbc-card.alert-unmatch { border-left: 4px solid #ef4444; }
+    .jbc-card.alert-night { border-left: 4px solid #f59e0b; }
+    .jbc-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .jbc-staff-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .jbc-staff-group { font-size: 11px; color: #64748b; font-weight: 500; margin-top: 2px; }
-    .jbc-tag { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
-    .jbc-tag.blue { background: #dbeafe; color: #1d4ed8; } .jbc-tag.purple { background: #f3e8ff; color: #7e22ce; } .jbc-tag.red { background: #fee2e2; color: #b91c1c; } .jbc-tag.amber { background: #fef3c7; color: #b45309; } .jbc-tag.green { background: #d1fae5; color: #047857; } .jbc-tag.gray { background: #f1f5f9; color: #475569; }
-    .jbc-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 10px; background: #f8fafc; padding: 9px 11px; border-radius: 10px; font-size: 12px; }
-    .jbc-info-item { display: flex; flex-direction: column; gap: 1px; } .jbc-info-item.full { grid-column: 1 / -1; }
-    .jbc-info-label { font-size: 10px; color: #64748b; font-weight: 600; } .jbc-info-val { font-size: 12px; font-weight: 700; color: #1e293b; }
+    .jbc-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .jbc-tag.blue { background: #dbeafe; color: #1d4ed8; }
+    .jbc-tag.purple { background: #f3e8ff; color: #7e22ce; }
+    .jbc-tag.red { background: #fee2e2; color: #b91c1c; }
+    .jbc-tag.amber { background: #fef3c7; color: #b45309; }
+    .jbc-tag.green { background: #d1fae5; color: #047857; }
+    .jbc-tag.gray { background: #f1f5f9; color: #475569; }
+    .jbc-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 10px;
+      background: #f8fafc;
+      padding: 9px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .jbc-info-item { display: flex; flex-direction: column; gap: 1px; }
+    .jbc-info-item.full { grid-column: 1 / -1; }
+    .jbc-info-label { font-size: 10px; color: #64748b; font-weight: 600; }
+    .jbc-info-val { font-size: 12px; font-weight: 700; color: #1e293b; }
     .jbc-btn-row { display: flex; gap: 8px; margin-top: 2px; }
-    .jbc-btn { flex: 1; border: none; border-radius: 10px; padding: 9px 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; }
-    .jbc-btn.primary { background: #2563eb; color: #fff; } .jbc-btn.success { background: #10b981; color: #fff; } .jbc-btn.danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; } .jbc-btn.secondary { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+    .jbc-btn {
+      flex: 1;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+    .jbc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .jbc-btn.primary { background: #2563eb; color: #fff; }
+    .jbc-btn.success { background: #10b981; color: #fff; }
+    .jbc-btn.danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .jbc-btn.secondary { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
     .jbc-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; flex-shrink: 0; }
-    .jbc-pill { border: 1px solid #cbd5e1; background: #fff; color: #475569; padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .jbc-pill {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #475569;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
     .jbc-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
-    .jbc-bottom-nav { background: #fff; border-top: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 4px 10px; flex-shrink: 0; }
-    .jbc-nav-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 2px; color: #64748b; font-size: 10px; font-weight: 700; cursor: pointer; position: relative; border-radius: 10px; }
+    .jbc-bottom-nav {
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 6px 4px 10px;
+      flex-shrink: 0;
+    }
+    .jbc-nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px 2px;
+      color: #64748b;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      border-radius: 10px;
+    }
     .jbc-nav-btn.active { color: #2563eb; background: #eff6ff; }
     .jbc-nav-icon { font-size: 17px; line-height: 1; }
-    .jbc-nav-badge { position: absolute; top: 2px; right: 12px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 999px; min-width: 14px; text-align: center; }
-    .jbc-modal-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.55); display: none; align-items: flex-end; justify-content: center; z-index: 30; }
+    .jbc-nav-badge {
+      position: absolute;
+      top: 2px;
+      right: 12px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 999px;
+      min-width: 14px;
+      text-align: center;
+    }
+    .jbc-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 30;
+    }
     .jbc-modal-backdrop.open { display: flex; }
-    .jbc-modal-sheet { width: 100%; max-height: 85%; background: #fff; border-radius: 22px 22px 0 0; padding: 18px 16px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.2); }
-    .jbc-toast { position: absolute; top: 68px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; font-size: 12px; font-weight: 700; padding: 10px 16px; border-radius: 999px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); z-index: 40; display: none; white-space: nowrap; }
-    .jbc-empty { text-align: center; padding: 28px 14px; color: #64748b; font-size: 12px; background: #fff; border-radius: 14px; border: 1px dashed #cbd5e1; }
-    .jbc-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 44px 16px; gap: 12px; color: #475569; font-size: 12px; font-weight: 600; }
-    .jbc-spinner { width: 26px; height: 26px; border: 3px solid #cbd5e1; border-top-color: #2563eb; border-radius: 50%; animation: jbc-spin 0.8s linear infinite; }
+    .jbc-modal-sheet {
+      width: 100%;
+      max-height: 85%;
+      background: #fff;
+      border-radius: 22px 22px 0 0;
+      padding: 18px 16px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.2);
+    }
+    .jbc-toast {
+      position: absolute;
+      top: 68px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      z-index: 40;
+      display: none;
+      white-space: nowrap;
+    }
+    .jbc-empty {
+      text-align: center;
+      padding: 28px 14px;
+      color: #64748b;
+      font-size: 12px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px dashed #cbd5e1;
+    }
+    .jbc-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 44px 16px;
+      gap: 12px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .jbc-spinner {
+      width: 26px;
+      height: 26px;
+      border: 3px solid #cbd5e1;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: jbc-spin 0.8s linear infinite;
+    }
     @keyframes jbc-spin { to { transform: rotate(360deg); } }
   `;
   document.head.appendChild(style);
+
   const root = document.createElement('div');
   root.id = 'jbc-mobile-root';
   root.innerHTML = `
@@ -433,7 +850,10 @@
       <div class="jbc-toast" id="jbc-toast"></div>
       <div class="jbc-header">
         <div class="jbc-header-left">
-          <div class="jbc-header-title"><span>📱 Jobcan Mobile</span><span class="jbc-badge-live">v1.0</span></div>
+          <div class="jbc-header-title">
+            <span>📱 Jobcan Mobile</span>
+            <span class="jbc-badge-live">v1.0</span>
+          </div>
           <div class="jbc-header-sub" id="jbc-user-label">データ読込中...</div>
         </div>
         <div class="jbc-header-actions">
@@ -441,34 +861,113 @@
           <button class="jbc-icon-btn" id="jbc-min-btn">🖥 元画面</button>
         </div>
       </div>
+
       <div class="jbc-kpi-bar">
-        <div class="jbc-kpi-card active" data-tab="approvals"><div class="jbc-kpi-num primary" id="kpi-approvals">-</div><div class="jbc-kpi-label">未承認申請</div></div>
-        <div class="jbc-kpi-card" data-tab="errors"><div class="jbc-kpi-num danger" id="kpi-errors">-</div><div class="jbc-kpi-label">打刻エラー</div></div>
-        <div class="jbc-kpi-card" data-tab="today"><div class="jbc-kpi-num success" id="kpi-today">-</div><div class="jbc-kpi-label">本日勤務中</div></div>
-        <div class="jbc-kpi-card" data-tab="mypage"><div class="jbc-kpi-num warn" id="kpi-mypage">-</div><div class="jbc-kpi-label">マイ実働</div></div>
+        <div class="jbc-kpi-card active" data-tab="approvals">
+          <div class="jbc-kpi-num primary" id="kpi-approvals">-</div>
+          <div class="jbc-kpi-label">未承認申請</div>
+        </div>
+        <div class="jbc-kpi-card" data-tab="errors">
+          <div class="jbc-kpi-num danger" id="kpi-errors">-</div>
+          <div class="jbc-kpi-label">打刻エラー</div>
+        </div>
+        <div class="jbc-kpi-card" data-tab="today">
+          <div class="jbc-kpi-num success" id="kpi-today">-</div>
+          <div class="jbc-kpi-label">本日勤務中</div>
+        </div>
+        <div class="jbc-kpi-card" data-tab="mypage">
+          <div class="jbc-kpi-num warn" id="kpi-mypage">-</div>
+          <div class="jbc-kpi-label">マイ実働</div>
+        </div>
       </div>
+
       <div class="jbc-content" id="jbc-main-content"></div>
-      <div class="jbc-modal-backdrop" id="jbc-modal"><div class="jbc-modal-sheet" id="jbc-modal-body"></div></div>
+
+      <div class="jbc-modal-backdrop" id="jbc-modal">
+        <div class="jbc-modal-sheet" id="jbc-modal-body"></div>
+      </div>
+
       <div class="jbc-bottom-nav">
-        <button class="jbc-nav-btn active" data-tab="approvals"><span class="jbc-nav-icon">✅</span><span>未承認</span><span class="jbc-nav-badge" id="badge-approvals" style="display:none">0</span></button>
-        <button class="jbc-nav-btn" data-tab="errors"><span class="jbc-nav-icon">⚠️</span><span>エラー一覧</span><span class="jbc-nav-badge" id="badge-errors" style="display:none">0</span></button>
-        <button class="jbc-nav-btn" data-tab="today"><span class="jbc-nav-icon">👥</span><span>本日の状況</span></button>
-        <button class="jbc-nav-btn" data-tab="mypage"><span class="jbc-nav-icon">📅</span><span>マイ出勤簿</span></button>
-        <button class="jbc-nav-btn" data-tab="menu"><span class="jbc-nav-icon">⚡</span><span>全メニュー</span></button>
+        <button class="jbc-nav-btn active" data-tab="approvals">
+          <span class="jbc-nav-icon">✅</span>
+          <span>未承認</span>
+          <span class="jbc-nav-badge" id="badge-approvals" style="display:none">0</span>
+        </button>
+        <button class="jbc-nav-btn" data-tab="errors">
+          <span class="jbc-nav-icon">⚠️</span>
+          <span>エラー一覧</span>
+          <span class="jbc-nav-badge" id="badge-errors" style="display:none">0</span>
+        </button>
+        <button class="jbc-nav-btn" data-tab="today">
+          <span class="jbc-nav-icon">👥</span>
+          <span>本日の状況</span>
+        </button>
+        <button class="jbc-nav-btn" data-tab="mypage">
+          <span class="jbc-nav-icon">📅</span>
+          <span>マイ出勤簿</span>
+        </button>
+        <button class="jbc-nav-btn" data-tab="menu">
+          <span class="jbc-nav-icon">⚡</span>
+          <span>全メニュー</span>
+        </button>
       </div>
     </div>
   `;
   document.body.appendChild(root);
-  const state = { activeTab: isClientPage ? 'approvals' : 'mypage', errorFilter: 'all', todayFilter: 'all', userName: '', aditApprovals: [], holidayApprovals: [], unmatchErrors: [], nightErrors: [], todayStaff: [], mySummary: { workDays: '-', workHours: '-', overtime: '-', paidLeave: '-' }, myAttendance: [] };
-  const showToast = (msg) => { const t = document.getElementById('jbc-toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 3000); };
-  const parseDoc = async (url) => { const res = await fetch(url, { credentials: 'same-origin' }); const html = await res.text(); return new DOMParser().parseFromString(html, 'text/html'); };
+
+  const state = {
+    activeTab: isClientPage ? 'approvals' : 'mypage',
+    errorFilter: 'all',
+    todayFilter: 'all',
+    userName: '',
+    aditApprovals: [],
+    holidayApprovals: [],
+    unmatchErrors: [],
+    nightErrors: [],
+    todayStaff: [],
+    mySummary: { workDays: '-', workHours: '-', overtime: '-', paidLeave: '-' },
+    myAttendance: []
+  };
+
+  const showToast = (msg) => {
+    const t = document.getElementById('jbc-toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+  };
+
+  const parseDoc = async (url) => {
+    const res = await fetch(url, { credentials: 'same-origin' });
+    const html = await res.text();
+    return new DOMParser().parseFromString(html, 'text/html');
+  };
+
   const clean = (str) => (str || '').replace(/\s+/g, ' ').trim();
+
   async function loadAllData() {
     const contentEl = document.getElementById('jbc-main-content');
-    contentEl.innerHTML = '<div class="jbc-loading"><div class="jbc-spinner"></div><div>ジョブカンの全ページデータを一括取得中...</div></div>';
+    contentEl.innerHTML = `
+      <div class="jbc-loading">
+        <div class="jbc-spinner"></div>
+        <div>ジョブカンの全ページデータを一括取得中...</div>
+      </div>
+    `;
+
     try {
-      const now = new Date(); const y = now.getFullYear(); const m = now.getMonth() + 1; const d = now.getDate();
-      const [clientTopDoc, applovedDoc, holidayDoc, unmatchDoc, nightDoc, todayDoc, myAttDoc] = await Promise.all([
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+
+      const [
+        clientTopDoc,
+        applovedDoc,
+        holidayDoc,
+        unmatchDoc,
+        nightDoc,
+        todayDoc,
+        myAttDoc
+      ] = await Promise.all([
         parseDoc('https://ssl.jobcan.jp/client').catch(() => null),
         parseDoc(`https://ssl.jobcan.jp/client/apploved?search_type=term&fromYear=${y}&fromMonth=${Math.max(1, m - 1)}&fromDay=1&toYear=${y + 1}&toMonth=${m}&toDay=${d}&searching=1&fromtop=1`).catch(() => null),
         parseDoc('https://ssl.jobcan.jp/client/employee-holiday-applied?fromtop=1&search_type=term').catch(() => null),
@@ -477,9 +976,13 @@
         parseDoc('https://ssl.jobcan.jp/client/work-state/show/?submit_type=today&searching=1&list_type=normal&number_par_page=30&group_where_type=main&retirement=work').catch(() => null),
         parseDoc('https://ssl.jobcan.jp/employee/attendance').catch(() => null)
       ]);
+
+      // ユーザー名取得
       const managerLink = clientTopDoc ? clean(clientTopDoc.querySelector('#header')?.innerText) : '';
       const nameMatch = managerLink.match(/([^\s]+)\s*様/);
       state.userName = nameMatch ? `${nameMatch[1]} 様` : 'ログイン中';
+
+      // 1. 未承認打刻
       state.aditApprovals = [];
       if (applovedDoc) {
         const aditTable = applovedDoc.querySelector('table.note');
@@ -492,16 +995,35 @@
               const cb = tds[0].querySelector('input[name="approved-list"]');
               const detailLink = tds[tds.length - 1].querySelector('a')?.getAttribute('href') || '';
               const nextRow = rows[i + 1];
-              let note = '', appliedAt = '';
+              let note = '';
+              let appliedAt = '';
               if (nextRow && nextRow.querySelectorAll('td').length <= 3) {
                 const nextTds = nextRow.querySelectorAll('td');
-                note = clean(nextTds[0]?.innerText); appliedAt = clean(nextTds[1]?.innerText); i++;
+                note = clean(nextTds[0]?.innerText);
+                appliedAt = clean(nextTds[1]?.innerText);
+                i++;
               }
-              state.aditApprovals.push({ type: '打刻修正申請', checkboxVal: cb?.value || '', token: aditToken, staff: clean(tds[1]?.innerText), summary: clean(tds[2]?.innerText), date: clean(tds[3]?.innerText), clockIn: clean(tds[5]?.innerText), clockOut: clean(tds[6]?.innerText), workTime: clean(tds[7]?.innerText), overtime: clean(tds[10]?.innerText), detailUrl: detailLink, note, appliedAt });
+              state.aditApprovals.push({
+                type: '打刻修正申請',
+                checkboxVal: cb?.value || '',
+                token: aditToken,
+                staff: clean(tds[1]?.innerText),
+                summary: clean(tds[2]?.innerText),
+                date: clean(tds[3]?.innerText),
+                clockIn: clean(tds[5]?.innerText),
+                clockOut: clean(tds[6]?.innerText),
+                workTime: clean(tds[7]?.innerText),
+                overtime: clean(tds[10]?.innerText),
+                detailUrl: detailLink,
+                note,
+                appliedAt
+              });
             }
           }
         }
       }
+
+      // 2. 未承認休暇申請
       state.holidayApprovals = [];
       if (holidayDoc) {
         const holTable = holidayDoc.querySelector('table.note');
@@ -511,21 +1033,46 @@
             const cb = tr.querySelector('input[name="exec[]"]');
             if (!cb) return;
             const tds = tr.querySelectorAll('td');
-            state.holidayApprovals.push({ type: '休暇申請', execVal: cb.value, token: holToken, appliedDate: clean(tds[1]?.innerText), staff: clean(tds[2]?.innerText), targetDate: clean(tds[3]?.innerText), holidayType: clean(tds[4]?.innerText), reason: clean(tds[5]?.innerText), status: clean(tds[7]?.innerText) });
+            state.holidayApprovals.push({
+              type: '休暇申請',
+              execVal: cb.value,
+              token: holToken,
+              appliedDate: clean(tds[1]?.innerText),
+              staff: clean(tds[2]?.innerText),
+              targetDate: clean(tds[3]?.innerText),
+              holidayType: clean(tds[4]?.innerText),
+              reason: clean(tds[5]?.innerText),
+              status: clean(tds[7]?.innerText)
+            });
           });
         }
       }
+
+      // 3. 打刻エラー
       const parseErrorTable = (doc, categoryLabel) => {
-        const list = []; if (!doc) return list;
-        const tbl = doc.querySelector('table.note'); if (!tbl) return list;
+        const list = [];
+        if (!doc) return list;
+        const tbl = doc.querySelector('table.note');
+        if (!tbl) return list;
         Array.from(tbl.querySelectorAll('tr')).slice(1).forEach(tr => {
           const tds = tr.querySelectorAll('td');
-          if (tds.length >= 6) list.push({ code: clean(tds[0]?.innerText), staff: clean(tds[1]?.innerText), group: clean(tds[2]?.innerText), date: clean(tds[3]?.innerText), errorType: clean(tds[4]?.innerText) || categoryLabel, detailUrl: tds[5]?.querySelector('a')?.getAttribute('href') || '' });
+          if (tds.length >= 6) {
+            list.push({
+              code: clean(tds[0]?.innerText),
+              staff: clean(tds[1]?.innerText),
+              group: clean(tds[2]?.innerText),
+              date: clean(tds[3]?.innerText),
+              errorType: clean(tds[4]?.innerText) || categoryLabel,
+              detailUrl: tds[5]?.querySelector('a')?.getAttribute('href') || ''
+            });
+          }
         });
         return list;
       };
       state.unmatchErrors = parseErrorTable(unmatchDoc, '打刻漏れ・打刻間違い');
       state.nightErrors = parseErrorTable(nightDoc, '承認なしの深夜残業・未打刻');
+
+      // 4. 本日の勤務状況
       state.todayStaff = [];
       if (todayDoc) {
         const todayTable = todayDoc.querySelector('table.note');
@@ -538,143 +1085,470 @@
               const nameLink = tds[0]?.querySelector('a');
               const name = nameLink ? clean(nameLink.innerText) : staffRaw.split(' ')[0];
               const aditUrl = tds[1]?.querySelector('a')?.getAttribute('href') || '';
-              state.todayStaff.push({ name, status: clean(tds[2]?.innerText), shift: clean(tds[3]?.innerText), clockIn: clean(tds[4]?.innerText), clockOut: clean(tds[5]?.innerText), workTime: clean(tds[6]?.innerText), hasError: clean(tds[9]?.innerText).includes('エラー'), aditUrl });
+              state.todayStaff.push({
+                name,
+                status: clean(tds[2]?.innerText),
+                shift: clean(tds[3]?.innerText),
+                clockIn: clean(tds[4]?.innerText),
+                clockOut: clean(tds[5]?.innerText),
+                workTime: clean(tds[6]?.innerText),
+                hasError: clean(tds[9]?.innerText).includes('エラー'),
+                aditUrl
+              });
             }
           }
         }
       }
+
+      // 5. マイ出勤簿
       state.myAttendance = [];
       if (myAttDoc) {
         const myTables = myAttDoc.querySelectorAll('table.jbc-table');
         if (myTables.length >= 5) {
           const textAll = clean(myAttDoc.body.innerText);
-          const mDays = textAll.match(/実働日数\s*(\d+)/), mHours = textAll.match(/実労働時間\s*([\d:]+)/), mOver = textAll.match(/実残業時間\s*([\d:]+)/), mPaid = textAll.match(/有休\s*([\d.]+)/);
-          state.mySummary = { workDays: mDays ? mDays[1] + '日' : '-', workHours: mHours ? mHours[1] : '-', overtime: mOver ? mOver[1] : '-', paidLeave: mPaid ? mPaid[1] + '日' : '-' };
+          const mDays = textAll.match(/実働日数\s*(\d+)/);
+          const mHours = textAll.match(/実労働時間\s*([\d:]+)/);
+          const mOver = textAll.match(/実残業時間\s*([\d:]+)/);
+          const mPaid = textAll.match(/有休\s*([\d.]+)/);
+          state.mySummary = {
+            workDays: mDays ? mDays[1] + '日' : '-',
+            workHours: mHours ? mHours[1] : '-',
+            overtime: mOver ? mOver[1] : '-',
+            paidLeave: mPaid ? mPaid[1] + '日' : '-'
+          };
           const calTable = myTables[myTables.length - 1];
           Array.from(calTable.querySelectorAll('tbody tr')).forEach(tr => {
             const tds = tr.querySelectorAll('td');
             if (tds.length >= 10) {
               const dateStr = clean(tds[0]?.childNodes[0]?.textContent || tds[0]?.innerText.split('打刻')[0]);
-              state.myAttendance.push({ date: dateStr, holidayType: clean(tds[1]?.innerText), shift: clean(tds[2]?.innerText), clockIn: clean(tds[3]?.innerText), clockOut: clean(tds[4]?.innerText), workTime: clean(tds[5]?.innerText), overtime: clean(tds[7]?.innerText), status: clean(tds[10]?.innerText) });
+              state.myAttendance.push({
+                date: dateStr,
+                holidayType: clean(tds[1]?.innerText),
+                shift: clean(tds[2]?.innerText),
+                clockIn: clean(tds[3]?.innerText),
+                clockOut: clean(tds[4]?.innerText),
+                workTime: clean(tds[5]?.innerText),
+                overtime: clean(tds[7]?.innerText),
+                status: clean(tds[10]?.innerText)
+              });
             }
           });
         }
       }
-      updateCounters(); renderActiveTab();
+
+      updateCounters();
+      renderActiveTab();
     } catch (err) {
       contentEl.innerHTML = `<div class="jbc-empty">データの取得中にエラーが発生しました。<br>${err.message}</div>`;
     }
   }
+
   function updateCounters() {
     const totalApprovals = state.aditApprovals.length + state.holidayApprovals.length;
     const totalErrors = state.unmatchErrors.length + state.nightErrors.length;
     const workingNow = state.todayStaff.filter(s => s.status.includes('勤務中')).length;
+
     document.getElementById('kpi-approvals').textContent = totalApprovals + '件';
     document.getElementById('kpi-errors').textContent = totalErrors + '件';
     document.getElementById('kpi-today').textContent = state.todayStaff.length ? `${workingNow}/${state.todayStaff.length}人` : '-';
     document.getElementById('kpi-mypage').textContent = state.mySummary.workHours || '-';
     document.getElementById('jbc-user-label').textContent = `ジョブカン | ${state.userName}`;
-    const bApp = document.getElementById('badge-approvals'); bApp.style.display = totalApprovals > 0 ? 'inline-block' : 'none'; bApp.textContent = totalApprovals;
-    const bErr = document.getElementById('badge-errors'); bErr.style.display = totalErrors > 0 ? 'inline-block' : 'none'; bErr.textContent = totalErrors;
+
+    const bApp = document.getElementById('badge-approvals');
+    bApp.style.display = totalApprovals > 0 ? 'inline-block' : 'none';
+    bApp.textContent = totalApprovals;
+
+    const bErr = document.getElementById('badge-errors');
+    bErr.style.display = totalErrors > 0 ? 'inline-block' : 'none';
+    bErr.textContent = totalErrors;
   }
+
+  // ワンタップ承認処理（打刻修正一括承認エンドポイント利用）
   window.jbcQuickApproveAdit = async function(checkboxVal, token, staffName) {
     if (!confirm(`${staffName} さんの打刻修正申請を承認しますか？`)) return;
     try {
-      const params = new URLSearchParams(); params.append('token', token); params.append('approved-list', checkboxVal); params.append('only_acls', '1'); params.append('fromtop', '1');
-      await fetch('/client/apploved/all-apploved', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString(), credentials: 'same-origin' });
-      showToast(`✅ ${staffName} さんの打刻修正を承認しました`); loadAllData();
-    } catch (e) { alert('承認通信に失敗しました: ' + e.message); }
+      const params = new URLSearchParams();
+      params.append('token', token);
+      params.append('approved-list', checkboxVal);
+      params.append('only_acls', '1');
+      params.append('fromtop', '1');
+      await fetch('/client/apploved/all-apploved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+        credentials: 'same-origin'
+      });
+      showToast(`✅ ${staffName} さんの打刻修正を承認しました`);
+      loadAllData();
+    } catch (e) {
+      alert('承認通信に失敗しました: ' + e.message);
+    }
   };
+
+  // ワンタップ休暇承認・却下処理
   window.jbcQuickActionHoliday = async function(actionType, execVal, token, staffName) {
     const label = actionType === 'approve' ? '承認' : '却下';
     if (!confirm(`${staffName} さんの休暇申請を【${label}】しますか？`)) return;
     try {
       const parts = execVal.split(':');
-      const params = new URLSearchParams(); params.append('token', token); params.append('rowIds[0]', parts[2]); params.append('ids[0][selected_employee_id]', parts[0]); params.append('ids[0][applied_id]', parts[1]); params.append('ids[0][approval_id]', parts[3]); params.append('ids[0][approval_manager_id]', parts[4]);
-      const endpoint = actionType === 'approve' ? '/client/employee-holiday-applied/approve?fromtop=1&search_type=term' : '/client/employee-holiday-applied/reject?fromtop=1&search_type=term';
-      await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest' }, body: params.toString(), credentials: 'same-origin' });
-      showToast(`✅ ${staffName} さんの休暇申請を${label}しました`); loadAllData();
-    } catch (e) { alert(`${label}通信に失敗しました: ` + e.message); }
+      const params = new URLSearchParams();
+      params.append('token', token);
+      params.append('rowIds[0]', parts[2]);
+      params.append('ids[0][selected_employee_id]', parts[0]);
+      params.append('ids[0][applied_id]', parts[1]);
+      params.append('ids[0][approval_id]', parts[3]);
+      params.append('ids[0][approval_manager_id]', parts[4]);
+
+      const endpoint = actionType === 'approve'
+        ? '/client/employee-holiday-applied/approve?fromtop=1&search_type=term'
+        : '/client/employee-holiday-applied/reject?fromtop=1&search_type=term';
+
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: params.toString(),
+        credentials: 'same-origin'
+      });
+      showToast(`✅ ${staffName} さんの休暇申請を${label}しました`);
+      loadAllData();
+    } catch (e) {
+      alert(`${label}通信に失敗しました: ` + e.message);
+    }
   };
+
+  // 出入詳細プレビューモーダル
   window.jbcOpenAditModal = async function(detailUrl, staffName, dateStr) {
-    const modal = document.getElementById('jbc-modal'), body = document.getElementById('jbc-modal-body');
+    const modal = document.getElementById('jbc-modal');
+    const body = document.getElementById('jbc-modal-body');
     modal.classList.add('open');
-    body.innerHTML = `<div class="jbc-loading" style="padding:24px;"><div class="jbc-spinner"></div><div>${staffName} (${dateStr}) の打刻詳細を取得中...</div></div>`;
+    body.innerHTML = `
+      <div class="jbc-loading" style="padding:24px;">
+        <div class="jbc-spinner"></div>
+        <div>${staffName} (${dateStr}) の打刻詳細を取得中...</div>
+      </div>
+    `;
     try {
       const doc = await parseDoc(detailUrl);
       const noteTables = doc.querySelectorAll('table.note');
       const recordTable = noteTables[1];
       const rows = recordTable ? Array.from(recordTable.querySelectorAll('tr')).slice(1) : [];
       const recordsHtml = rows.map(tr => {
-        const tds = tr.querySelectorAll('td'); if (tds.length < 5) return '';
+        const tds = tr.querySelectorAll('td');
+        if (tds.length < 5) return '';
         const typeSel = tds[0]?.querySelector('select');
         const typeTxt = typeSel ? typeSel.options[typeSel.selectedIndex]?.text : clean(tds[0]?.innerText);
         const timeTxt = tds[1]?.querySelector('input')?.value || clean(tds[1]?.innerText);
-        const methodTxt = clean(tds[2]?.innerText); const noteTxt = clean(tds[4]?.innerText);
+        const methodTxt = clean(tds[2]?.innerText);
+        const noteTxt = clean(tds[4]?.innerText);
         const isPending = tr.innerText.includes('承認') && tr.innerText.includes('却下');
-        return `<div style="padding:10px 12px; border-radius:10px; background:${isPending ? '#eff6ff' : '#f8fafc'}; border:1px solid ${isPending ? '#93c5fd' : '#e2e8f0'}; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-size:13px; font-weight:800; color:#0f172a;">${typeTxt || '打刻'} <span style="color:#2563eb; margin-left:6px;">${timeTxt}</span></div><div style="font-size:11px; color:#64748b;">${methodTxt} ${noteTxt ? ' / 備考: ' + noteTxt : ''}</div></div>${isPending ? '<span class="jbc-tag blue">承認待ち</span>' : '<span class="jbc-tag gray">承認済</span>'}</div>`;
+        return `
+          <div style="padding:10px 12px; border-radius:10px; background:${isPending ? '#eff6ff' : '#f8fafc'}; border:1px solid ${isPending ? '#93c5fd' : '#e2e8f0'}; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:13px; font-weight:800; color:#0f172a;">${typeTxt || '打刻'} <span style="color:#2563eb; margin-left:6px;">${timeTxt}</span></div>
+              <div style="font-size:11px; color:#64748b;">${methodTxt} ${noteTxt ? ' / 備考: ' + noteTxt : ''}</div>
+            </div>
+            ${isPending ? '<span class="jbc-tag blue">承認待ち</span>' : '<span class="jbc-tag gray">承認済</span>'}
+          </div>
+        `;
       }).join('');
-      body.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center;"><div><div style="font-size:15px; font-weight:800;">${staffName} の出入詳細</div><div style="font-size:11px; color:#64748b;">対象日: ${dateStr}</div></div><button class="jbc-btn secondary" style="flex:0; padding:6px 12px;" onclick="document.getElementById('jbc-modal').classList.remove('open')">✕ 閉じる</button></div><div style="display:flex; flex-direction:column; gap:8px;">${recordsHtml || '<div class="jbc-empty">打刻履歴がありません</div>'}</div><div class="jbc-btn-row" style="margin-top:6px;"><a href="${detailUrl}" class="jbc-btn primary">📝 この日の打刻修正・詳細画面へ</a></div>`;
-    } catch (e) { body.innerHTML = `<div class="jbc-empty">詳細の取得に失敗しました: ${e.message}</div>`; }
+
+      body.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:15px; font-weight:800;">${staffName} の出入詳細</div>
+            <div style="font-size:11px; color:#64748b;">対象日: ${dateStr}</div>
+          </div>
+          <button class="jbc-btn secondary" style="flex:0; padding:6px 12px;" onclick="document.getElementById('jbc-modal').classList.remove('open')">✕ 閉じる</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${recordsHtml || '<div class="jbc-empty">打刻履歴がありません</div>'}
+        </div>
+        <div class="jbc-btn-row" style="margin-top:6px;">
+          <a href="${detailUrl}" class="jbc-btn primary">📝 この日の打刻修正・詳細画面へ</a>
+        </div>
+      `;
+    } catch (e) {
+      body.innerHTML = `<div class="jbc-empty">詳細の取得に失敗しました: ${e.message}</div>`;
+    }
   };
+
   function renderActiveTab() {
     const contentEl = document.getElementById('jbc-main-content');
-    document.querySelectorAll('.jbc-nav-btn, .jbc-kpi-card').forEach(el => el.classList.toggle('active', el.dataset.tab === state.activeTab));
+    document.querySelectorAll('.jbc-nav-btn, .jbc-kpi-card').forEach(el => {
+      el.classList.toggle('active', el.dataset.tab === state.activeTab);
+    });
+
     if (state.activeTab === 'approvals') renderApprovals(contentEl);
     else if (state.activeTab === 'errors') renderErrors(contentEl);
     else if (state.activeTab === 'today') renderToday(contentEl);
     else if (state.activeTab === 'mypage') renderMyPage(contentEl);
     else if (state.activeTab === 'menu') renderQuickMenu(contentEl);
   }
+
   function renderApprovals(container) {
-    let html = `<div class="jbc-sec-head"><div class="jbc-sec-title">🕒 未承認の打刻修正申請</div><span class="jbc-sec-count">${state.aditApprovals.length}件</span></div>`;
-    if (state.aditApprovals.length === 0) html += `<div class="jbc-empty">未承認の打刻修正はありません 🎉</div>`;
-    else state.aditApprovals.forEach(item => {
-      const safeVal = item.checkboxVal.replace(/'/g, "\\'");
-      html += `<div class="jbc-card urgent"><div class="jbc-card-top"><div><div class="jbc-staff-name">👤 ${item.staff}</div><div class="jbc-staff-group">${item.appliedAt || item.summary}</div></div><span class="jbc-tag blue">${item.type}</span></div><div class="jbc-info-grid"><div class="jbc-info-item"><span class="jbc-info-label">対象日</span><span class="jbc-info-val">${item.date}</span></div><div class="jbc-info-item"><span class="jbc-info-label">労働時間 / 残業</span><span class="jbc-info-val">${item.workTime.split('⇒').pop()} (残 ${item.overtime.split('⇒').pop()})</span></div><div class="jbc-info-item"><span class="jbc-info-label">出勤時刻</span><span class="jbc-info-val">${item.clockIn}</span></div><div class="jbc-info-item"><span class="jbc-info-label">退勤時刻</span><span class="jbc-info-val">${item.clockOut}</span></div></div><div class="jbc-btn-row"><button class="jbc-btn secondary" onclick="jbcOpenAditModal('${item.detailUrl}', '${item.staff}', '${item.date}')">🔍 内訳を見る</button><button class="jbc-btn success" onclick="jbcQuickApproveAdit('${safeVal}', '${item.token}', '${item.staff}')">✅ この場で承認</button></div></div>`;
-    });
-    html += `<div class="jbc-sec-head" style="margin-top:6px;"><div class="jbc-sec-title">🌴 未承認の休暇申請</div><span class="jbc-sec-count">${state.holidayApprovals.length}件</span></div>`;
-    if (state.holidayApprovals.length === 0) html += `<div class="jbc-empty">未承認の休暇申請はありません 🎉</div>`;
-    else state.holidayApprovals.forEach(item => {
-      html += `<div class="jbc-card urgent"><div class="jbc-card-top"><div><div class="jbc-staff-name">👤 ${item.staff}</div><div class="jbc-staff-group">申請日: ${item.appliedDate} | ${item.status}</div></div><span class="jbc-tag purple">${item.holidayType}</span></div><div class="jbc-info-grid"><div class="jbc-info-item"><span class="jbc-info-label">休暇希望日</span><span class="jbc-info-val" style="color:#2563eb;">${item.targetDate}</span></div><div class="jbc-info-item"><span class="jbc-info-label">休暇理由</span><span class="jbc-info-val">${item.reason || '-'}</span></div></div><div class="jbc-btn-row"><button class="jbc-btn danger" style="flex:0.45;" onclick="jbcQuickActionHoliday('reject', '${item.execVal}', '${item.token}', '${item.staff}')">✕ 却下</button><button class="jbc-btn success" onclick="jbcQuickActionHoliday('approve', '${item.execVal}', '${item.token}', '${item.staff}')">✅ この場で承認</button></div></div>`;
-    });
+    let html = `
+      <div class="jbc-sec-head">
+        <div class="jbc-sec-title">🕒 未承認の打刻修正申請</div>
+        <span class="jbc-sec-count">${state.aditApprovals.length}件</span>
+      </div>
+    `;
+
+    if (state.aditApprovals.length === 0) {
+      html += `<div class="jbc-empty">未承認の打刻修正はありません 🎉</div>`;
+    } else {
+      state.aditApprovals.forEach((item) => {
+        const safeVal = item.checkboxVal.replace(/'/g, "\\'");
+        html += `
+          <div class="jbc-card urgent">
+            <div class="jbc-card-top">
+              <div>
+                <div class="jbc-staff-name">👤 ${item.staff}</div>
+                <div class="jbc-staff-group">${item.appliedAt || item.summary}</div>
+              </div>
+              <span class="jbc-tag blue">${item.type}</span>
+            </div>
+            <div class="jbc-info-grid">
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">対象日</span>
+                <span class="jbc-info-val">${item.date}</span>
+              </div>
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">労働時間 / 残業</span>
+                <span class="jbc-info-val">${item.workTime.split('⇒').pop()} (残 ${item.overtime.split('⇒').pop()})</span>
+              </div>
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">出勤時刻</span>
+                <span class="jbc-info-val">${item.clockIn}</span>
+              </div>
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">退勤時刻</span>
+                <span class="jbc-info-val">${item.clockOut}</span>
+              </div>
+            </div>
+            <div class="jbc-btn-row">
+              <button class="jbc-btn secondary" onclick="jbcOpenAditModal('${item.detailUrl}', '${item.staff}', '${item.date}')">🔍 内訳を見る</button>
+              <button class="jbc-btn success" onclick="jbcQuickApproveAdit('${safeVal}', '${item.token}', '${item.staff}')">✅ この場で承認</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    html += `
+      <div class="jbc-sec-head" style="margin-top:6px;">
+        <div class="jbc-sec-title">🌴 未承認の休暇申請</div>
+        <span class="jbc-sec-count">${state.holidayApprovals.length}件</span>
+      </div>
+    `;
+
+    if (state.holidayApprovals.length === 0) {
+      html += `<div class="jbc-empty">未承認の休暇申請はありません 🎉</div>`;
+    } else {
+      state.holidayApprovals.forEach(item => {
+        html += `
+          <div class="jbc-card urgent">
+            <div class="jbc-card-top">
+              <div>
+                <div class="jbc-staff-name">👤 ${item.staff}</div>
+                <div class="jbc-staff-group">申請日: ${item.appliedDate} | ${item.status}</div>
+              </div>
+              <span class="jbc-tag purple">${item.holidayType}</span>
+            </div>
+            <div class="jbc-info-grid">
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">休暇希望日</span>
+                <span class="jbc-info-val" style="color:#2563eb;">${item.targetDate}</span>
+              </div>
+              <div class="jbc-info-item">
+                <span class="jbc-info-label">休暇理由</span>
+                <span class="jbc-info-val">${item.reason || '-'}</span>
+              </div>
+            </div>
+            <div class="jbc-btn-row">
+              <button class="jbc-btn danger" style="flex:0.45;" onclick="jbcQuickActionHoliday('reject', '${item.execVal}', '${item.token}', '${item.staff}')">✕ 却下</button>
+              <button class="jbc-btn success" onclick="jbcQuickActionHoliday('approve', '${item.execVal}', '${item.token}', '${item.staff}')">✅ この場で承認</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
     container.innerHTML = html;
   }
+
   function renderErrors(container) {
-    const allErrors = [...state.unmatchErrors.map(e => ({ ...e, kind: 'unmatch' })), ...state.nightErrors.map(e => ({ ...e, kind: 'night' }))];
+    const allErrors = [
+      ...state.unmatchErrors.map(e => ({ ...e, kind: 'unmatch' })),
+      ...state.nightErrors.map(e => ({ ...e, kind: 'night' }))
+    ];
     const filtered = allErrors.filter(e => state.errorFilter === 'all' || e.kind === state.errorFilter);
-    let html = `<div class="jbc-pills"><button class="jbc-pill ${state.errorFilter === 'all' ? 'active' : ''}" onclick="window.jbcSetErrFilter('all')">すべて (${allErrors.length})</button><button class="jbc-pill ${state.errorFilter === 'unmatch' ? 'active' : ''}" onclick="window.jbcSetErrFilter('unmatch')">🔴 打刻漏れ・間違い (${state.unmatchErrors.length})</button><button class="jbc-pill ${state.errorFilter === 'night' ? 'active' : ''}" onclick="window.jbcSetErrFilter('night')">🟡 深夜残業・未打刻 (${state.nightErrors.length})</button></div>`;
-    if (filtered.length === 0) html += `<div class="jbc-empty">該当する打刻エラーはありません 🎉</div>`;
-    else filtered.forEach(err => {
-      const isUnmatch = err.kind === 'unmatch';
-      html += `<div class="jbc-card ${isUnmatch ? 'alert-unmatch' : 'alert-night'}"><div class="jbc-card-top"><div><div class="jbc-staff-name">👤 ${err.staff} <span style="font-size:11px; color:#64748b; font-weight:500;">(${err.code})</span></div><div class="jbc-staff-group">${err.group}</div></div><span class="jbc-tag ${isUnmatch ? 'red' : 'amber'}">${err.errorType}</span></div><div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:8px 12px; border-radius:10px;"><div><span style="font-size:11px; color:#64748b; font-weight:600;">対象日: </span><span style="font-size:13px; font-weight:800; color:#0f172a;">${err.date}</span></div><button class="jbc-btn secondary" style="flex:0; padding:6px 12px; font-size:11px;" onclick="jbcOpenAditModal('${err.detailUrl}', '${err.staff}', '${err.date}')">🔍 打刻を確認</button></div></div>`;
-    });
+
+    let html = `
+      <div class="jbc-pills">
+        <button class="jbc-pill ${state.errorFilter === 'all' ? 'active' : ''}" onclick="window.jbcSetErrFilter('all')">すべて (${allErrors.length})</button>
+        <button class="jbc-pill ${state.errorFilter === 'unmatch' ? 'active' : ''}" onclick="window.jbcSetErrFilter('unmatch')">🔴 打刻漏れ・間違い (${state.unmatchErrors.length})</button>
+        <button class="jbc-pill ${state.errorFilter === 'night' ? 'active' : ''}" onclick="window.jbcSetErrFilter('night')">🟡 深夜残業・未打刻 (${state.nightErrors.length})</button>
+      </div>
+    `;
+
+    if (filtered.length === 0) {
+      html += `<div class="jbc-empty">該当する打刻エラーはありません 🎉</div>`;
+    } else {
+      filtered.forEach(err => {
+        const isUnmatch = err.kind === 'unmatch';
+        html += `
+          <div class="jbc-card ${isUnmatch ? 'alert-unmatch' : 'alert-night'}">
+            <div class="jbc-card-top">
+              <div>
+                <div class="jbc-staff-name">👤 ${err.staff} <span style="font-size:11px; color:#64748b; font-weight:500;">(${err.code})</span></div>
+                <div class="jbc-staff-group">${err.group}</div>
+              </div>
+              <span class="jbc-tag ${isUnmatch ? 'red' : 'amber'}">${err.errorType}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:8px 12px; border-radius:10px;">
+              <div>
+                <span style="font-size:11px; color:#64748b; font-weight:600;">対象日: </span>
+                <span style="font-size:13px; font-weight:800; color:#0f172a;">${err.date}</span>
+              </div>
+              <button class="jbc-btn secondary" style="flex:0; padding:6px 12px; font-size:11px;" onclick="jbcOpenAditModal('${err.detailUrl}', '${err.staff}', '${err.date}')">🔍 打刻を確認</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
     container.innerHTML = html;
   }
-  window.jbcSetErrFilter = function(f) { state.errorFilter = f; renderActiveTab(); };
+
+  window.jbcSetErrFilter = function(f) {
+    state.errorFilter = f;
+    renderActiveTab();
+  };
+
   function renderToday(container) {
     const workingCount = state.todayStaff.filter(s => s.status.includes('勤務中')).length;
     const leftCount = state.todayStaff.filter(s => s.status.includes('退出中')).length;
-    const filtered = state.todayStaff.filter(s => state.todayFilter === 'working' ? s.status.includes('勤務中') : state.todayFilter === 'left' ? s.status.includes('退出中') : true);
-    let html = `<div class="jbc-pills"><button class="jbc-pill ${state.todayFilter === 'all' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('all')">全員 (${state.todayStaff.length})</button><button class="jbc-pill ${state.todayFilter === 'working' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('working')">🟢 勤務中 (${workingCount})</button><button class="jbc-pill ${state.todayFilter === 'left' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('left')">⚪ 退出済 (${leftCount})</button></div>`;
+
+    const filtered = state.todayStaff.filter(s => {
+      if (state.todayFilter === 'working') return s.status.includes('勤務中');
+      if (state.todayFilter === 'left') return s.status.includes('退出中');
+      return true;
+    });
+
+    let html = `
+      <div class="jbc-pills">
+        <button class="jbc-pill ${state.todayFilter === 'all' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('all')">全員 (${state.todayStaff.length})</button>
+        <button class="jbc-pill ${state.todayFilter === 'working' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('working')">🟢 勤務中 (${workingCount})</button>
+        <button class="jbc-pill ${state.todayFilter === 'left' ? 'active' : ''}" onclick="window.jbcSetTodayFilter('left')">⚪ 退出済 (${leftCount})</button>
+      </div>
+    `;
+
     filtered.forEach(s => {
       const isWorking = s.status.includes('勤務中');
-      html += `<div class="jbc-card"><div class="jbc-card-top"><div><div class="jbc-staff-name"><span>${isWorking ? '🟢' : '⚪'} ${s.name}</span>${s.hasError ? '<span class="jbc-tag red" style="font-size:10px;">要確認エラー</span>' : ''}</div><div class="jbc-staff-group">シフト: ${s.shift}</div></div><span class="jbc-tag ${isWorking ? 'green' : 'gray'}">${s.status}</span></div><div class="jbc-info-grid" style="grid-template-columns: repeat(3, 1fr);"><div class="jbc-info-item"><span class="jbc-info-label">出勤</span><span class="jbc-info-val">${s.clockIn.split(' ')[0]}</span></div><div class="jbc-info-item"><span class="jbc-info-label">退勤</span><span class="jbc-info-val">${s.clockOut.split(' ')[0]}</span></div><div class="jbc-info-item"><span class="jbc-info-label">労働時間</span><span class="jbc-info-val">${s.workTime}</span></div></div><div class="jbc-btn-row"><button class="jbc-btn secondary" onclick="jbcOpenAditModal('${s.aditUrl}', '${s.name}', '本日')">🔍 出入詳細を見る</button></div></div>`;
+      html += `
+        <div class="jbc-card">
+          <div class="jbc-card-top">
+            <div>
+              <div class="jbc-staff-name">
+                <span>${isWorking ? '🟢' : '⚪'} ${s.name}</span>
+                ${s.hasError ? '<span class="jbc-tag red" style="font-size:10px;">要確認エラー</span>' : ''}
+              </div>
+              <div class="jbc-staff-group">シフト: ${s.shift}</div>
+            </div>
+            <span class="jbc-tag ${isWorking ? 'green' : 'gray'}">${s.status}</span>
+          </div>
+          <div class="jbc-info-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="jbc-info-item">
+              <span class="jbc-info-label">出勤</span>
+              <span class="jbc-info-val">${s.clockIn.split(' ')[0]}</span>
+            </div>
+            <div class="jbc-info-item">
+              <span class="jbc-info-label">退勤</span>
+              <span class="jbc-info-val">${s.clockOut.split(' ')[0]}</span>
+            </div>
+            <div class="jbc-info-item">
+              <span class="jbc-info-label">労働時間</span>
+              <span class="jbc-info-val">${s.workTime}</span>
+            </div>
+          </div>
+          <div class="jbc-btn-row">
+            <button class="jbc-btn secondary" onclick="jbcOpenAditModal('${s.aditUrl}', '${s.name}', '本日')">🔍 出入詳細を見る</button>
+          </div>
+        </div>
+      `;
     });
+
     container.innerHTML = html;
   }
-  window.jbcSetTodayFilter = function(f) { state.todayFilter = f; renderActiveTab(); };
+
+  window.jbcSetTodayFilter = function(f) {
+    state.todayFilter = f;
+    renderActiveTab();
+  };
+
   function renderMyPage(container) {
-    let html = `<div class="jbc-card" style="background: linear-gradient(135deg, #1e3a8a, #1d4ed8); color:#fff; border:none;"><div style="display:flex; justify-content:space-between; align-items:center;"><div><div style="font-size:11px; opacity:0.85;">マイページ集計（当月）</div><div style="font-size:16px; font-weight:800;">${state.userName}</div></div><a href="https://ssl.jobcan.jp/employee/adit" class="jbc-btn" style="flex:0; background:#fff; color:#1d4ed8; padding:7px 12px; font-size:11px;">✏️ 打刻修正</a></div><div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; background:rgba(255,255,255,0.12); padding:10px; border-radius:12px; text-align:center;"><div><div style="font-size:10px; opacity:0.8;">実働日数</div><div style="font-size:13px; font-weight:800;">${state.mySummary.workDays}</div></div><div><div style="font-size:10px; opacity:0.8;">実労働時間</div><div style="font-size:13px; font-weight:800;">${state.mySummary.workHours}</div></div><div><div style="font-size:10px; opacity:0.8;">残業時間</div><div style="font-size:13px; font-weight:800;">${state.mySummary.overtime}</div></div><div><div style="font-size:10px; opacity:0.8;">有休残</div><div style="font-size:13px; font-weight:800;">${state.mySummary.paidLeave}</div></div></div><div class="jbc-btn-row"><a href="https://ssl.jobcan.jp/employee/holiday" class="jbc-btn" style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; padding:8px;">🌴 休暇申請</a><a href="https://ssl.jobcan.jp/employee/over-work" class="jbc-btn" style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; padding:8px;">🌙 残業申請</a></div></div><div class="jbc-sec-head"><div class="jbc-sec-title">📅 当月の出勤簿（カード表示）</div></div>`;
-    if (state.myAttendance.length === 0) html += `<div class="jbc-empty">マイページにログインすると自分の出勤簿が表示されます。<br><a href="https://ssl.jobcan.jp/employee" style="color:#2563eb; font-weight:700;">マイページを開く ›</a></div>`;
-    else state.myAttendance.forEach(day => {
-      const isWork = day.clockIn || day.workTime;
-      const isHoliday = day.holidayType.includes('公休') || day.holidayType.includes('祝');
-      if (!isWork && isHoliday) return;
-      html += `<div class="jbc-card" style="padding:10px 14px;"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="font-size:13px; font-weight:800; color:#0f172a;">${day.date}${day.status ? `<span class="jbc-tag purple" style="margin-left:6px;">${day.status}</span>` : ''}</div><div style="font-size:12px; font-weight:700; color:#2563eb;">${day.clockIn ? `${day.clockIn} 〜 ${day.clockOut || '勤務中'}` : day.holidayType}</div></div>${day.workTime ? `<div style="display:flex; gap:14px; font-size:11px; color:#64748b;"><span>実働: <strong style="color:#1e293b">${day.workTime}</strong></span><span>残業: <strong style="color:#1e293b">${day.overtime || '00:00'}</strong></span><span>シフト: ${day.shift}</span></div>` : ''}</div>`;
-    });
+    let html = `
+      <div class="jbc-card" style="background: linear-gradient(135deg, #1e3a8a, #1d4ed8); color:#fff; border:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:11px; opacity:0.85;">マイページ集計（当月）</div>
+            <div style="font-size:16px; font-weight:800;">${state.userName}</div>
+          </div>
+          <a href="https://ssl.jobcan.jp/employee/adit" class="jbc-btn" style="flex:0; background:#fff; color:#1d4ed8; padding:7px 12px; font-size:11px;">✏️ 打刻修正</a>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; background:rgba(255,255,255,0.12); padding:10px; border-radius:12px; text-align:center;">
+          <div><div style="font-size:10px; opacity:0.8;">実働日数</div><div style="font-size:13px; font-weight:800;">${state.mySummary.workDays}</div></div>
+          <div><div style="font-size:10px; opacity:0.8;">実労働時間</div><div style="font-size:13px; font-weight:800;">${state.mySummary.workHours}</div></div>
+          <div><div style="font-size:10px; opacity:0.8;">残業時間</div><div style="font-size:13px; font-weight:800;">${state.mySummary.overtime}</div></div>
+          <div><div style="font-size:10px; opacity:0.8;">有休残</div><div style="font-size:13px; font-weight:800;">${state.mySummary.paidLeave}</div></div>
+        </div>
+        <div class="jbc-btn-row">
+          <a href="https://ssl.jobcan.jp/employee/holiday" class="jbc-btn" style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; padding:8px;">🌴 休暇申請</a>
+          <a href="https://ssl.jobcan.jp/employee/over-work" class="jbc-btn" style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; padding:8px;">🌙 残業申請</a>
+        </div>
+      </div>
+
+      <div class="jbc-sec-head">
+        <div class="jbc-sec-title">📅 当月の出勤簿（カード表示）</div>
+      </div>
+    `;
+
+    if (state.myAttendance.length === 0) {
+      html += `<div class="jbc-empty">マイページにログインすると自分の出勤簿が表示されます。<br><a href="https://ssl.jobcan.jp/employee" style="color:#2563eb; font-weight:700;">マイページを開く ›</a></div>`;
+    } else {
+      state.myAttendance.forEach(day => {
+        const isWork = day.clockIn || day.workTime;
+        const isHoliday = day.holidayType.includes('公休') || day.holidayType.includes('祝');
+        if (!isWork && isHoliday) return;
+        html += `
+          <div class="jbc-card" style="padding:10px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-size:13px; font-weight:800; color:#0f172a;">
+                ${day.date}
+                ${day.status ? `<span class="jbc-tag purple" style="margin-left:6px;">${day.status}</span>` : ''}
+              </div>
+              <div style="font-size:12px; font-weight:700; color:#2563eb;">
+                ${day.clockIn ? `${day.clockIn} 〜 ${day.clockOut || '勤務中'}` : day.holidayType}
+              </div>
+            </div>
+            ${day.workTime ? `
+              <div style="display:flex; gap:14px; font-size:11px; color:#64748b;">
+                <span>実働: <strong style="color:#1e293b">${day.workTime}</strong></span>
+                <span>残業: <strong style="color:#1e293b">${day.overtime || '00:00'}</strong></span>
+                <span>シフト: ${day.shift}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+    }
+
     container.innerHTML = html;
   }
+
   function renderQuickMenu(container) {
     const links = [
       { section: '管理者：よく使う承認・確認', items: [
@@ -692,26 +1566,53 @@
         { icon: '🏖️', title: '休暇申請', desc: '有休・特別休暇などの新規申請', url: 'https://ssl.jobcan.jp/employee/holiday' }
       ]}
     ];
+
     let html = '';
     links.forEach(group => {
       html += `<div class="jbc-sec-head"><div class="jbc-sec-title">${group.section}</div></div>`;
       group.items.forEach(item => {
-        html += `<a href="${item.url}" class="jbc-card" style="text-decoration:none; flex-direction:row; align-items:center; justify-content:space-between; padding:11px 14px;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:20px;">${item.icon}</span><div><div style="font-size:13px; font-weight:800; color:#0f172a;">${item.title}</div><div style="font-size:11px; color:#64748b;">${item.desc}</div></div></div><span style="color:#94a3b8; font-weight:800;">›</span></a>`;
+        html += `
+          <a href="${item.url}" class="jbc-card" style="text-decoration:none; flex-direction:row; align-items:center; justify-content:space-between; padding:11px 14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:20px;">${item.icon}</span>
+              <div>
+                <div style="font-size:13px; font-weight:800; color:#0f172a;">${item.title}</div>
+                <div style="font-size:11px; color:#64748b;">${item.desc}</div>
+              </div>
+            </div>
+            <span style="color:#94a3b8; font-weight:800;">›</span>
+          </a>
+        `;
       });
     });
+
     container.innerHTML = html;
   }
-  document.querySelectorAll('.jbc-nav-btn, .jbc-kpi-card').forEach(btn => btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; renderActiveTab(); }));
+
+  document.querySelectorAll('.jbc-nav-btn, .jbc-kpi-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeTab = btn.dataset.tab;
+      renderActiveTab();
+    });
+  });
+
   document.getElementById('jbc-refresh-btn').addEventListener('click', loadAllData);
-  document.getElementById('jbc-min-btn').addEventListener('click', () => root.classList.add('jbc-minimized'));
-  document.getElementById('jbc-restore-btn').addEventListener('click', () => root.classList.remove('jbc-minimized'));
-  document.getElementById('jbc-modal').addEventListener('click', (e) => { if (e.target.id === 'jbc-modal') e.target.classList.remove('open'); });
+  document.getElementById('jbc-min-btn').addEventListener('click', () => {
+    root.classList.add('jbc-minimized');
+  });
+  document.getElementById('jbc-restore-btn').addEventListener('click', () => {
+    root.classList.remove('jbc-minimized');
+  });
+  document.getElementById('jbc-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'jbc-modal') e.target.classList.remove('open');
+  });
+
   loadAllData();
 })();
   </script>
 
   <script>
-    // Build Bookmarklet & Userscript on page load (100% self-contained)
+    // Build Bookmarklet & Userscript on page load (100% self-contained, production-only core)
     const rawCore = document.getElementById('jobcan-core-script').textContent.trim();
     const bookmarkletUrl = 'javascript:' + encodeURIComponent(rawCore);
     document.getElementById('bookmarklet-link').href = bookmarkletUrl;
@@ -734,9 +1635,6 @@
       ].join('\n');
     }
 
-    // Encode UTF-8 string to Base64 data:application/javascript URL
-    // Using data:application/javascript;base64 (without ;charset=utf-8) ensures Android Edge/Chrome
-    // preserves the .js filename and registers the file as a proper JS file even from local HTML files.
     function toBase64Utf8(str) {
       const bytes = new TextEncoder().encode(str);
       let binary = '';
@@ -770,70 +1668,342 @@
       setTimeout(() => t.style.display = 'none', 4000);
     }
 
-    // Initialize static preview on the right column
-    (function initSimulator() {
-      const sim = document.getElementById('demo-phone-container');
-      sim.innerHTML = `
-        <div class="jbc-header" style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px;">
-              <span>📱 Jobcan Mobile</span>
-              <span style="background:#10b981;font-size:10px;padding:2px 6px;border-radius:999px;">Preview</span>
-            </div>
-            <div style="font-size:11px;color:#94a3b8;">ジョブカン | サンプル表示</div>
-          </div>
-          <span style="font-size:11px;background:rgba(255,255,255,0.12);padding:5px 9px;border-radius:8px;">🔄 最新</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px;background:#fff;border-bottom:1px solid #e2e8f0;text-align:center;">
-          <div style="background:#eff6ff;border:1px solid #2563eb;border-radius:10px;padding:6px 4px;"><div style="font-size:15px;font-weight:800;color:#2563eb;">2件</div><div style="font-size:9px;color:#64748b;font-weight:700;">未承認申請</div></div>
-          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:6px 4px;"><div style="font-size:15px;font-weight:800;color:#dc2626;">3件</div><div style="font-size:9px;color:#64748b;font-weight:700;">打刻エラー</div></div>
-          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:6px 4px;"><div style="font-size:15px;font-weight:800;color:#059669;">5/8人</div><div style="font-size:9px;color:#64748b;font-weight:700;">本日勤務中</div></div>
-          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:6px 4px;"><div style="font-size:15px;font-weight:800;color:#d97706;">120:00</div><div style="font-size:9px;color:#64748b;font-weight:700;">マイ実働</div></div>
-        </div>
-        <div style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:12px;">
-          <div style="font-weight:800;color:#1e293b;display:flex;justify-content:space-between;"><span>🕒 未承認の打刻修正申請</span><span style="background:#e2e8f0;padding:1px 7px;border-radius:999px;font-size:11px;">1件</span></div>
-          <div style="background:#fff;border-radius:14px;padding:12px;border:1px solid #e2e8f0;border-left:4px solid #2563eb;display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;justify-content:space-between;">
-              <div><div style="font-weight:800;font-size:13.5px;">👤 メンバーA</div><div style="font-size:10px;color:#64748b;">申請: 2026/11/17 18:00</div></div>
-              <span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;height:fit-content;">打刻修正</span>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f8fafc;padding:8px 10px;border-radius:8px;">
-              <div><div style="font-size:9px;color:#64748b;">対象日</div><div style="font-weight:700;">2026/11/16</div></div>
-              <div><div style="font-size:9px;color:#64748b;">実働 / 残業</div><div style="font-weight:700;">8時間0分 (残0分)</div></div>
-              <div><div style="font-size:9px;color:#64748b;">出勤</div><div style="font-weight:700;">09:00</div></div>
-              <div><div style="font-size:9px;color:#64748b;">退勤</div><div style="font-weight:700;">18:00</div></div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="flex:1;padding:8px;border-radius:8px;border:1px solid #cbd5e1;background:#f1f5f9;font-weight:700;font-size:11px;text-align:center;">🔍 内訳を見る</div>
-              <div style="flex:1;padding:8px;border-radius:8px;background:#10b981;color:#fff;font-weight:700;font-size:11px;text-align:center;">✅ この場で承認</div>
-            </div>
-          </div>
+    // Portal-only Sample Simulator (shared between Right-column Phone Preview and Fullscreen Sample Overlay)
+    const simState = {
+      activeTab: 'approvals',
+      errorFilter: 'all',
+      todayFilter: 'all',
+      aditApprovals: [
+        { id: 'a1', staff: '佐藤 健太', sub: '申請: 11/20 18:35 (客先直行のため)', date: '2026/11/20 (金)', clockIn: '09:00 (修正)', clockOut: '18:30', work: '08:30 (残 00:30)', records: [
+          { type: '出勤', time: '09:00', method: 'スタッフ申請 (修正)', note: '客先直行のため', pending: true },
+          { type: '休憩開始', time: '12:00', method: 'Web打刻', note: '', pending: false },
+          { type: '休憩終了', time: '13:00', method: 'Web打刻', note: '', pending: false },
+          { type: '退勤', time: '18:30', method: 'ICカード (本社)', note: '', pending: false }
+        ]},
+        { id: 'a2', staff: '鈴木 美咲', sub: '申請: 11/20 09:12 (退勤打刻忘れ)', date: '2026/11/19 (木)', clockIn: '09:30', clockOut: '19:15 (修正)', work: '08:45 (残 00:45)', records: [
+          { type: '出勤', time: '09:30', method: 'ICカード (本社)', note: '', pending: false },
+          { type: '退勤', time: '19:15', method: 'スタッフ申請 (修正)', note: '退勤時の打刻忘れ', pending: true }
+        ]}
+      ],
+      holidayApprovals: [
+        { id: 'h1', staff: '高橋 誠', appliedDate: '2026/11/18', targetDate: '2026/11/25 (水)', type: '有休 (全休)', reason: '私用のため（役所手続き）' },
+        { id: 'h2', staff: '伊藤 結衣', appliedDate: '2026/11/19', targetDate: '2026/11/24 (火)', type: '有休 (午前半休)', reason: '通院のため' }
+      ],
+      errors: [
+        { id: 'e1', kind: 'unmatch', staff: '渡辺 翔太', code: 'ST-014', group: '営業部 第1チーム', date: '2026/11/19 (木)', label: '退勤打刻漏れ（出勤のみ）', records: [
+          { type: '出勤', time: '08:55', method: 'モバイルGPS打刻', note: '以降打刻なし', pending: false }
+        ]},
+        { id: 'e2', kind: 'unmatch', staff: '小林 さくら', code: 'ST-022', group: 'カスタマーサクセス部', date: '2026/11/18 (水)', label: '出入不整合（連続出勤）', records: [
+          { type: '出勤', time: '09:20', method: 'Web打刻', note: '', pending: false },
+          { type: '出勤 (エラー)', time: '18:30', method: 'Web打刻', note: '退勤との押し間違い', pending: false }
+        ]},
+        { id: 'e3', kind: 'night', staff: '加藤 大輔', code: 'ST-008', group: '開発部 インフラチーム', date: '2026/11/19 (木)', label: '承認なし深夜残業 (22:45)', records: [
+          { type: '出勤', time: '10:00', method: 'Web打刻', note: '', pending: false },
+          { type: '退勤 (深夜)', time: '22:45', method: 'Web打刻', note: '深夜残業申請なし', pending: false }
+        ]}
+      ],
+      todayStaff: [
+        { name: '佐藤 健太', status: '勤務中', shift: '通常 (09:30〜18:30)', in: '09:24', out: '-', work: '06:15', err: false },
+        { name: '鈴木 美咲', status: '勤務中', shift: '通常 (09:30〜18:30)', in: '09:28', out: '-', work: '06:11', err: false },
+        { name: '渡辺 翔太', status: '勤務中', shift: 'フレックス', in: '08:50', out: '-', work: '06:49', err: true },
+        { name: '加藤 大輔', status: '勤務中', shift: 'リモート (10:00〜19:00)', in: '09:55', out: '-', work: '05:44', err: false },
+        { name: '伊藤 結衣', status: '勤務中', shift: '通常 (09:30〜18:30)', in: '09:20', out: '-', work: '06:19', err: false },
+        { name: '田中 裕子', status: '退出中', shift: '時短 (09:00〜16:00)', in: '08:55', out: '16:03', work: '06:08', err: false },
+        { name: '中村 拓海', status: '退出中', shift: '早番 (08:00〜17:00)', in: '07:52', out: '17:05', work: '08:13', err: false }
+      ],
+      myAttendance: [
+        { date: '11/20 (金)', status: '勤務中', range: '09:25 〜 勤務中', work: '06:15', over: '00:00', shift: '09:30〜18:30' },
+        { date: '11/19 (木)', status: '', range: '09:22 〜 19:30', work: '09:08', over: '01:08', shift: '09:30〜18:30' },
+        { date: '11/18 (水)', status: '', range: '09:28 〜 18:35', work: '08:07', over: '00:07', shift: '09:30〜18:30' },
+        { date: '11/17 (火)', status: '有休半休', range: '13:20 〜 18:40', work: '05:20', over: '00:10', shift: '13:30〜18:30' },
+        { date: '11/16 (月)', status: '', range: '09:18 〜 20:00', work: '09:42', over: '01:42', shift: '09:30〜18:30' }
+      ]
+    };
 
-          <div style="font-weight:800;color:#1e293b;display:flex;justify-content:space-between;margin-top:4px;"><span>🌴 未承認の休暇申請</span><span style="background:#e2e8f0;padding:1px 7px;border-radius:999px;font-size:11px;">1件</span></div>
-          <div style="background:#fff;border-radius:14px;padding:12px;border:1px solid #e2e8f0;border-left:4px solid #2563eb;display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;justify-content:space-between;">
-              <div><div style="font-weight:800;font-size:13.5px;">👤 メンバーB</div><div style="font-size:10px;color:#64748b;">申請日: 2026/11/18 | 未承認</div></div>
-              <span style="background:#f3e8ff;color:#7e22ce;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;height:fit-content;">有休(全休)</span>
+    const initialSimSnapshot = JSON.stringify(simState);
+
+    function openSampleOverlay() {
+      document.getElementById('portal-sample-overlay').classList.add('open');
+      renderAllSampleViews();
+    }
+    function closeSampleOverlay() {
+      document.getElementById('portal-sample-overlay').classList.remove('open');
+    }
+
+    window.simSwitchTab = function(t) { simState.activeTab = t; renderAllSampleViews(); };
+    window.simSetErrFilter = function(f) { simState.errorFilter = f; renderAllSampleViews(); };
+    window.simSetTodayFilter = function(f) { simState.todayFilter = f; renderAllSampleViews(); };
+    window.simReset = function() {
+      Object.assign(simState, JSON.parse(initialSimSnapshot));
+      renderAllSampleViews();
+      simToast('🔄 サンプルデータを初期状態にリセットしました');
+    };
+    window.simApproveAdit = function(id, name) {
+      simState.aditApprovals = simState.aditApprovals.filter(a => a.id !== id);
+      renderAllSampleViews();
+      simToast(`✅ [サンプル] ${name} さんの打刻修正を承認しました`);
+    };
+    window.simActionHoliday = function(id, name, label) {
+      simState.holidayApprovals = simState.holidayApprovals.filter(h => h.id !== id);
+      renderAllSampleViews();
+      simToast(`✅ [サンプル] ${name} さんの休暇申請を${label}しました`);
+    };
+    window.simOpenModal = function(staff, date, records) {
+      document.querySelectorAll('.sim-modal-target').forEach(m => {
+        const b = m.querySelector('.sim-modal-body-target');
+        m.style.display = 'flex';
+        b.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:14px;font-weight:800;">${staff} の出入詳細</div>
+              <div style="font-size:10.5px;color:#64748b;">対象日: ${date}（サンプルプレビュー）</div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f8fafc;padding:8px 10px;border-radius:8px;">
-              <div><div style="font-size:9px;color:#64748b;">休暇希望日</div><div style="font-weight:700;color:#2563eb;">2026/11/20</div></div>
-              <div><div style="font-size:9px;color:#64748b;">理由</div><div style="font-weight:700;">私用のため</div></div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="flex:0.45;padding:8px;border-radius:8px;border:1px solid #fca5a5;background:#fee2e2;color:#b91c1c;font-weight:700;font-size:11px;text-align:center;">✕ 却下</div>
-              <div style="flex:1;padding:8px;border-radius:8px;background:#10b981;color:#fff;font-weight:700;font-size:11px;text-align:center;">✅ この場で承認</div>
-            </div>
+            <button onclick="this.closest('.sim-modal-target').style.display='none'" style="border:1px solid #cbd5e1;background:#f1f5f9;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;">✕ 閉じる</button>
           </div>
-        </div>
-        <div style="background:#fff;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px 10px;text-align:center;font-size:9px;font-weight:700;color:#64748b;">
-          <div style="color:#2563eb;background:#eff6ff;border-radius:8px;padding:4px;">✅<br>未承認</div>
-          <div style="padding:4px;">⚠️<br>エラー一覧</div>
-          <div style="padding:4px;">👥<br>本日の状況</div>
-          <div style="padding:4px;">📅<br>マイ出勤簿</div>
-          <div style="padding:4px;">⚡<br>全メニュー</div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px;">
+            ${records.map(r => `
+              <div style="padding:9px 11px;border-radius:10px;background:${r.pending ? '#eff6ff' : '#f8fafc'};border:1px solid ${r.pending ? '#93c5fd' : '#e2e8f0'};display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <div style="font-size:12.5px;font-weight:800;color:#0f172a;">${r.type} <span style="color:#2563eb;margin-left:5px;">${r.time}</span></div>
+                  <div style="font-size:10.5px;color:#64748b;">${r.method}${r.note ? ' / ' + r.note : ''}</div>
+                </div>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:6px;background:${r.pending ? '#dbeafe' : '#f1f5f9'};color:${r.pending ? '#1d4ed8' : '#475569'};">${r.pending ? '承認待ち' : '承認済'}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      });
+    };
+
+    function simToast(msg) {
+      document.querySelectorAll('.sim-toast-target').forEach(t => {
+        t.textContent = msg;
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2600);
+      });
+    }
+
+    function buildSamplePhoneHtml(isOverlay) {
+      const totalApp = simState.aditApprovals.length + simState.holidayApprovals.length;
+      const totalErr = simState.errors.length;
+      const workingCount = simState.todayStaff.filter(s => s.status === '勤務中').length;
+
+      let bodyHtml = `
+        <div style="background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:11px;font-weight:700;padding:7px 11px;border-radius:10px;">
+          💡 サンプルデータ表示中（承認・内訳・タブ切替を体験できます）
         </div>
       `;
-    })();
+
+      if (simState.activeTab === 'approvals') {
+        bodyHtml += `<div style="font-weight:800;color:#1e293b;display:flex;justify-content:space-between;align-items:center;"><span>🕒 未承認の打刻修正申請</span><span style="background:#e2e8f0;padding:1px 7px;border-radius:999px;font-size:11px;">${simState.aditApprovals.length}件</span></div>`;
+        if (simState.aditApprovals.length === 0) {
+          bodyHtml += `<div style="text-align:center;padding:18px;background:#fff;border-radius:12px;border:1px dashed #cbd5e1;color:#64748b;">未承認の打刻修正はありません 🎉</div>`;
+        } else {
+          simState.aditApprovals.forEach(item => {
+            const recJson = JSON.stringify(item.records).replace(/"/g, '&quot;');
+            bodyHtml += `
+              <div style="background:#fff;border-radius:14px;padding:12px;border:1px solid #e2e8f0;border-left:4px solid #2563eb;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;justify-content:space-between;">
+                  <div><div style="font-weight:800;font-size:13.5px;">👤 ${item.staff}</div><div style="font-size:10px;color:#64748b;">${item.sub}</div></div>
+                  <span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;height:fit-content;">打刻修正</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f8fafc;padding:8px 10px;border-radius:8px;">
+                  <div><div style="font-size:9px;color:#64748b;">対象日</div><div style="font-weight:700;">${item.date}</div></div>
+                  <div><div style="font-size:9px;color:#64748b;">実働 / 残業</div><div style="font-weight:700;">${item.work}</div></div>
+                  <div><div style="font-size:9px;color:#64748b;">出勤</div><div style="font-weight:700;">${item.clockIn}</div></div>
+                  <div><div style="font-size:9px;color:#64748b;">退勤</div><div style="font-weight:700;">${item.clockOut}</div></div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <button onclick="simOpenModal('${item.staff}', '${item.date}', ${recJson})" style="flex:1;padding:8px;border-radius:8px;border:1px solid #cbd5e1;background:#f1f5f9;font-weight:700;font-size:11px;cursor:pointer;">🔍 内訳を見る</button>
+                  <button onclick="simApproveAdit('${item.id}', '${item.staff}')" style="flex:1;padding:8px;border-radius:8px;border:none;background:#10b981;color:#fff;font-weight:700;font-size:11px;cursor:pointer;">✅ この場で承認</button>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        bodyHtml += `<div style="font-weight:800;color:#1e293b;display:flex;justify-content:space-between;align-items:center;margin-top:4px;"><span>🌴 未承認の休暇申請</span><span style="background:#e2e8f0;padding:1px 7px;border-radius:999px;font-size:11px;">${simState.holidayApprovals.length}件</span></div>`;
+        if (simState.holidayApprovals.length === 0) {
+          bodyHtml += `<div style="text-align:center;padding:18px;background:#fff;border-radius:12px;border:1px dashed #cbd5e1;color:#64748b;">未承認の休暇申請はありません 🎉</div>`;
+        } else {
+          simState.holidayApprovals.forEach(item => {
+            bodyHtml += `
+              <div style="background:#fff;border-radius:14px;padding:12px;border:1px solid #e2e8f0;border-left:4px solid #2563eb;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;justify-content:space-between;">
+                  <div><div style="font-weight:800;font-size:13.5px;">👤 ${item.staff}</div><div style="font-size:10px;color:#64748b;">申請日: ${item.appliedDate} | 1次承認待ち</div></div>
+                  <span style="background:#f3e8ff;color:#7e22ce;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;height:fit-content;">${item.type}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f8fafc;padding:8px 10px;border-radius:8px;">
+                  <div><div style="font-size:9px;color:#64748b;">休暇希望日</div><div style="font-weight:700;color:#2563eb;">${item.targetDate}</div></div>
+                  <div><div style="font-size:9px;color:#64748b;">理由</div><div style="font-weight:700;">${item.reason}</div></div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <button onclick="simActionHoliday('${item.id}', '${item.staff}', '却下')" style="flex:0.45;padding:8px;border-radius:8px;border:1px solid #fca5a5;background:#fee2e2;color:#b91c1c;font-weight:700;font-size:11px;cursor:pointer;">✕ 却下</button>
+                  <button onclick="simActionHoliday('${item.id}', '${item.staff}', '承認')" style="flex:1;padding:8px;border-radius:8px;border:none;background:#10b981;color:#fff;font-weight:700;font-size:11px;cursor:pointer;">✅ この場で承認</button>
+                </div>
+              </div>
+            `;
+          });
+        }
+      } else if (simState.activeTab === 'errors') {
+        const unmatchCount = simState.errors.filter(e => e.kind === 'unmatch').length;
+        const nightCount = simState.errors.filter(e => e.kind === 'night').length;
+        const filtered = simState.errors.filter(e => simState.errorFilter === 'all' || e.kind === simState.errorFilter);
+        bodyHtml += `
+          <div style="display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;">
+            <button onclick="simSetErrFilter('all')" style="border:1px solid #cbd5e1;background:${simState.errorFilter==='all'?'#0f172a':'#fff'};color:${simState.errorFilter==='all'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;">すべて (${simState.errors.length})</button>
+            <button onclick="simSetErrFilter('unmatch')" style="border:1px solid #cbd5e1;background:${simState.errorFilter==='unmatch'?'#0f172a':'#fff'};color:${simState.errorFilter==='unmatch'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;">🔴 打刻漏れ (${unmatchCount})</button>
+            <button onclick="simSetErrFilter('night')" style="border:1px solid #cbd5e1;background:${simState.errorFilter==='night'?'#0f172a':'#fff'};color:${simState.errorFilter==='night'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;">🟡 深夜残業 (${nightCount})</button>
+          </div>
+        `;
+        filtered.forEach(err => {
+          const isUn = err.kind === 'unmatch';
+          const recJson = JSON.stringify(err.records).replace(/"/g, '&quot;');
+          bodyHtml += `
+            <div style="background:#fff;border-radius:14px;padding:12px;border:1px solid #e2e8f0;border-left:4px solid ${isUn?'#ef4444':'#f59e0b'};display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div><div style="font-weight:800;font-size:13.5px;">👤 ${err.staff} <span style="font-size:10.5px;color:#64748b;font-weight:500;">(${err.code})</span></div><div style="font-size:10.5px;color:#64748b;">${err.group}</div></div>
+                <span style="background:${isUn?'#fee2e2':'#fef3c7'};color:${isUn?'#b91c1c':'#b45309'};font-size:10px;font-weight:700;padding:3px 7px;border-radius:8px;">${err.label}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:7px 10px;border-radius:8px;">
+                <div><span style="font-size:10.5px;color:#64748b;">対象日: </span><strong style="font-size:12px;">${err.date}</strong></div>
+                <button onclick="simOpenModal('${err.staff}', '${err.date}', ${recJson})" style="border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:5px 10px;font-size:10.5px;font-weight:700;cursor:pointer;">🔍 打刻を確認</button>
+              </div>
+            </div>
+          `;
+        });
+      } else if (simState.activeTab === 'today') {
+        const leftCount = simState.todayStaff.length - workingCount;
+        const filtered = simState.todayStaff.filter(s => simState.todayFilter === 'working' ? s.status === '勤務中' : simState.todayFilter === 'left' ? s.status !== '勤務中' : true);
+        bodyHtml += `
+          <div style="display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;">
+            <button onclick="simSetTodayFilter('all')" style="border:1px solid #cbd5e1;background:${simState.todayFilter==='all'?'#0f172a':'#fff'};color:${simState.todayFilter==='all'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;">全員 (${simState.todayStaff.length})</button>
+            <button onclick="simSetTodayFilter('working')" style="border:1px solid #cbd5e1;background:${simState.todayFilter==='working'?'#0f172a':'#fff'};color:${simState.todayFilter==='working'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;">🟢 勤務中 (${workingCount})</button>
+            <button onclick="simSetTodayFilter('left')" style="border:1px solid #cbd5e1;background:${simState.todayFilter==='left'?'#0f172a':'#fff'};color:${simState.todayFilter==='left'?'#fff':'#475569'};padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;">⚪ 退出済 (${leftCount})</button>
+          </div>
+        `;
+        filtered.forEach(s => {
+          const isW = s.status === '勤務中';
+          bodyHtml += `
+            <div style="background:#fff;border-radius:14px;padding:11px 12px;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;display:flex;align-items:center;gap:5px;">
+                    <span>${isW?'🟢':'⚪'} ${s.name}</span>
+                    ${s.err ? '<span style="background:#fee2e2;color:#b91c1c;font-size:9.5px;padding:2px 6px;border-radius:6px;">要確認エラー</span>' : ''}
+                  </div>
+                  <div style="font-size:10.5px;color:#64748b;">シフト: ${s.shift}</div>
+                </div>
+                <span style="background:${isW?'#d1fae5':'#f1f5f9'};color:${isW?'#047857':'#475569'};font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;">${s.status}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#f8fafc;padding:7px 10px;border-radius:8px;">
+                <div><div style="font-size:9px;color:#64748b;">出勤</div><div style="font-weight:700;">${s.in}</div></div>
+                <div><div style="font-size:9px;color:#64748b;">退勤</div><div style="font-weight:700;">${s.out}</div></div>
+                <div><div style="font-size:9px;color:#64748b;">労働時間</div><div style="font-weight:700;">${s.work}</div></div>
+              </div>
+            </div>
+          `;
+        });
+      } else if (simState.activeTab === 'mypage') {
+        bodyHtml += `
+          <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:9px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:10px;opacity:0.85;">マイページ集計（当月）</div><div style="font-size:15px;font-weight:800;">山田 太郎 様</div></div>
+              <span style="background:#fff;color:#1d4ed8;padding:5px 10px;border-radius:8px;font-size:10.5px;font-weight:800;">✏️ 打刻修正</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:rgba(255,255,255,0.12);padding:8px;border-radius:10px;text-align:center;">
+              <div><div style="font-size:9px;opacity:0.8;">実働日数</div><div style="font-size:12px;font-weight:800;">14日</div></div>
+              <div><div style="font-size:9px;opacity:0.8;">実労働時間</div><div style="font-size:12px;font-weight:800;">116:30</div></div>
+              <div><div style="font-size:9px;opacity:0.8;">残業時間</div><div style="font-size:12px;font-weight:800;">12:30</div></div>
+              <div><div style="font-size:9px;opacity:0.8;">有休残</div><div style="font-size:12px;font-weight:800;">14.5日</div></div>
+            </div>
+          </div>
+          <div style="font-weight:800;color:#1e293b;margin-top:2px;">📅 当月の出勤簿（カード表示）</div>
+        `;
+        simState.myAttendance.forEach(d => {
+          bodyHtml += `
+            <div style="background:#fff;border-radius:12px;padding:9px 12px;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:4px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="font-weight:800;font-size:12.5px;">${d.date} ${d.status ? `<span style="background:#f3e8ff;color:#7e22ce;font-size:9.5px;padding:2px 6px;border-radius:6px;margin-left:4px;">${d.status}</span>` : ''}</div>
+                <div style="font-weight:700;font-size:11.5px;color:#2563eb;">${d.range}</div>
+              </div>
+              <div style="display:flex;gap:12px;font-size:10.5px;color:#64748b;">
+                <span>実働: <strong style="color:#0f172a;">${d.work}</strong></span>
+                <span>残業: <strong style="color:#0f172a;">${d.over}</strong></span>
+                <span>シフト: ${d.shift}</span>
+              </div>
+            </div>
+          `;
+        });
+      } else if (simState.activeTab === 'menu') {
+        const items = [
+          { icon: '🕒', title: '未承認打刻一覧', desc: 'スタッフの打刻修正申請を承認・却下' },
+          { icon: '🌴', title: '休暇申請一覧', desc: '有休・振休などの申請を承認・却下' },
+          { icon: '🌙', title: '残業申請一覧', desc: '残業申請の確認・承認' },
+          { icon: '⚠️', title: '打刻エラー一覧', desc: '打刻漏れ・承認なし深夜残業の確認' },
+          { icon: '👥', title: '本日の勤務状況', desc: 'リアルタイムの出退勤・労働時間一覧' },
+          { icon: '📅', title: 'マイ出勤簿（個人用）', desc: '自分の月次出勤簿・労働時間集計' }
+        ];
+        bodyHtml += `<div style="font-weight:800;color:#1e293b;">⚡ クイックメニュー</div>`;
+        items.forEach(it => {
+          bodyHtml += `
+            <div style="background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:18px;">${it.icon}</span>
+                <div><div style="font-weight:800;font-size:12.5px;">${it.title}</div><div style="font-size:10.5px;color:#64748b;">${it.desc}</div></div>
+              </div>
+              <span style="color:#94a3b8;font-weight:800;">›</span>
+            </div>
+          `;
+        });
+      }
+
+      return `
+        <div class="sim-toast-target" style="position:absolute;top:62px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:11px;font-weight:700;padding:8px 14px;border-radius:999px;box-shadow:0 10px 25px rgba(0,0,0,0.25);z-index:40;display:none;white-space:nowrap;"></div>
+        <div class="jbc-header" style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:6px;">
+              <span>📱 Jobcan Mobile</span>
+              <span style="background:#f59e0b;font-size:9.5px;padding:2px 6px;border-radius:999px;">サンプル</span>
+            </div>
+            <div style="font-size:10.5px;color:#94a3b8;">ジョブカン | 山田 太郎 様（サンプル）</div>
+          </div>
+          <div style="display:flex;gap:5px;">
+            <button onclick="simReset()" style="font-size:10.5px;background:rgba(255,255,255,0.14);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:5px 8px;border-radius:8px;cursor:pointer;font-weight:600;">🔄 リセット</button>
+            ${isOverlay
+              ? `<button onclick="closeSampleOverlay()" style="font-size:10.5px;background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:5px 9px;border-radius:8px;cursor:pointer;font-weight:700;">✕ 閉じる</button>`
+              : `<button onclick="openSampleOverlay()" style="font-size:10.5px;background:#2563eb;color:#fff;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-weight:700;">⛶ 全画面</button>`
+            }
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:9px 10px;background:#fff;border-bottom:1px solid #e2e8f0;text-align:center;">
+          <div onclick="simSwitchTab('approvals')" style="cursor:pointer;background:${simState.activeTab==='approvals'?'#eff6ff':'#f8fafc'};border:1px solid ${simState.activeTab==='approvals'?'#2563eb':'#e2e8f0'};border-radius:10px;padding:5px 3px;"><div style="font-size:14.5px;font-weight:800;color:#2563eb;">${totalApp}件</div><div style="font-size:9px;color:#64748b;font-weight:700;">未承認申請</div></div>
+          <div onclick="simSwitchTab('errors')" style="cursor:pointer;background:${simState.activeTab==='errors'?'#eff6ff':'#f8fafc'};border:1px solid ${simState.activeTab==='errors'?'#2563eb':'#e2e8f0'};border-radius:10px;padding:5px 3px;"><div style="font-size:14.5px;font-weight:800;color:#dc2626;">${totalErr}件</div><div style="font-size:9px;color:#64748b;font-weight:700;">打刻エラー</div></div>
+          <div onclick="simSwitchTab('today')" style="cursor:pointer;background:${simState.activeTab==='today'?'#eff6ff':'#f8fafc'};border:1px solid ${simState.activeTab==='today'?'#2563eb':'#e2e8f0'};border-radius:10px;padding:5px 3px;"><div style="font-size:14.5px;font-weight:800;color:#059669;">${workingCount}/${simState.todayStaff.length}人</div><div style="font-size:9px;color:#64748b;font-weight:700;">本日勤務中</div></div>
+          <div onclick="simSwitchTab('mypage')" style="cursor:pointer;background:${simState.activeTab==='mypage'?'#eff6ff':'#f8fafc'};border:1px solid ${simState.activeTab==='mypage'?'#2563eb':'#e2e8f0'};border-radius:10px;padding:5px 3px;"><div style="font-size:14.5px;font-weight:800;color:#d97706;">116:30</div><div style="font-size:9px;color:#64748b;font-weight:700;">マイ実働</div></div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:9px;font-size:12px;">
+          ${bodyHtml}
+        </div>
+        <div class="sim-modal-target" onclick="if(event.target.classList.contains('sim-modal-target'))this.style.display='none'" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);display:none;align-items:flex-end;justify-content:center;z-index:30;">
+          <div class="sim-modal-body-target" style="width:100%;max-height:80%;background:#fff;border-radius:20px 20px 0 0;padding:16px 14px 20px;overflow-y:auto;"></div>
+        </div>
+        <div style="background:#fff;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:repeat(5,1fr);padding:5px 4px 8px;text-align:center;font-size:9px;font-weight:700;color:#64748b;">
+          <div onclick="simSwitchTab('approvals')" style="cursor:pointer;color:${simState.activeTab==='approvals'?'#2563eb':'#64748b'};background:${simState.activeTab==='approvals'?'#eff6ff':'transparent'};border-radius:8px;padding:4px;position:relative;">✅<br>未承認${totalApp>0?`<span style="position:absolute;top:1px;right:8px;background:#ef4444;color:#fff;font-size:8px;padding:0 4px;border-radius:999px;">${totalApp}</span>`:''}</div>
+          <div onclick="simSwitchTab('errors')" style="cursor:pointer;color:${simState.activeTab==='errors'?'#2563eb':'#64748b'};background:${simState.activeTab==='errors'?'#eff6ff':'transparent'};border-radius:8px;padding:4px;position:relative;">⚠️<br>エラー一覧${totalErr>0?`<span style="position:absolute;top:1px;right:8px;background:#ef4444;color:#fff;font-size:8px;padding:0 4px;border-radius:999px;">${totalErr}</span>`:''}</div>
+          <div onclick="simSwitchTab('today')" style="cursor:pointer;color:${simState.activeTab==='today'?'#2563eb':'#64748b'};background:${simState.activeTab==='today'?'#eff6ff':'transparent'};border-radius:8px;padding:4px;">👥<br>本日の状況</div>
+          <div onclick="simSwitchTab('mypage')" style="cursor:pointer;color:${simState.activeTab==='mypage'?'#2563eb':'#64748b'};background:${simState.activeTab==='mypage'?'#eff6ff':'transparent'};border-radius:8px;padding:4px;">📅<br>マイ出勤簿</div>
+          <div onclick="simSwitchTab('menu')" style="cursor:pointer;color:${simState.activeTab==='menu'?'#2563eb':'#64748b'};background:${simState.activeTab==='menu'?'#eff6ff':'transparent'};border-radius:8px;padding:4px;">⚡<br>全メニュー</div>
+        </div>
+      `;
+    }
+
+    function renderAllSampleViews() {
+      document.getElementById('demo-phone-container').innerHTML = buildSamplePhoneHtml(false);
+      document.getElementById('overlay-phone-container').innerHTML = buildSamplePhoneHtml(true);
+    }
+
+    renderAllSampleViews();
   </script>
 </body>
 </html>
