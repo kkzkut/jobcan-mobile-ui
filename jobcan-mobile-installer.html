@@ -286,9 +286,15 @@
           <ol class="steps-list">
             <li>上の <strong>「📋 スマホ登録用ブックマークレットをコピー」</strong> ボタンを押します。</li>
             <li>普段どおりブラウザで <a href="https://ssl.jobcan.jp/client" target="_blank" style="color:#2563eb; font-weight:700;">ジョブカン管理画面</a>（またはマイページ）を開き、<strong>ブックマーク（お気に入り）に追加</strong>します。</li>
-            <li>追加したブックマークの「編集」を開き、名前を <code>📱ジョブカンスマホUI</code> に変え、<strong>URL欄を全消去して先ほどコピーした `javascript:...` を貼り付けて保存</strong>します。</li>
-            <li><strong>使い方：</strong> いつも通りジョブカンにログインした後、ブックマークから <code>📱ジョブカンスマホUI</code> を1タップすると、右のプレビューと同じスマホ画面に変身します！</li>
+            <li>追加したブックマークの「編集」を開き、名前を <code>ジョブカンスマホUI</code> に変え、<strong>URL欄を全消去して先ほどコピーした <code>javascript:...</code> を貼り付けて保存</strong>します。</li>
           </ol>
+
+          <div style="background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; border-radius:12px; padding:12px 14px; margin-top:14px; font-size:12.5px; color:#78350f;">
+            <strong style="display:block; font-size:13px; margin-bottom:4px; color:#92400e;">⚠️ Android（Chrome）で起動するときの重要な注意点</strong>
+            AndroidのChromeでは、ブラウザの仕様により<strong>「右上メニュー（︙）→ ブックマーク一覧」から選んでも何も起きません</strong>。<br>
+            ジョブカンを開いた状態で<strong>画面上の「アドレスバー（URL入力欄）」をタップし、<code>ジョブカン</code> と入力して候補に出てくる「⭐ ジョブカンスマホUI」をタップ</strong>して起動してください。<br>
+            <span style="font-size:11.5px; color:#92400e;">（iPhoneのSafariでは、通常のブックマーク一覧から1タップでそのまま起動できます）</span>
+          </div>
         </div>
 
         <!-- Method B: Userscript -->
@@ -298,7 +304,7 @@
               一度入れておけば、毎回ブックマークを押さなくても <code>ssl.jobcan.jp</code> を開いた瞬間に自動でスマホUIが立ち上がります。
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="btn green" onclick="downloadUserscript()">⬇️ 自動起動スクリプト (jobcan-mobile.user.js) を保存</button>
+              <a id="dl-userscript-link" class="btn green" href="#" download="jobcan-mobile.user.js">⬇️ 自動起動スクリプト (jobcan-mobile.user.js) を保存</a>
               <button class="btn outline" onclick="copyRawScript()">📋 スクリプトのソースコードをコピー</button>
             </div>
             <div class="toast-copy" id="copy-us-toast">✅ スクリプトをコピーしました！</div>
@@ -306,9 +312,9 @@
 
           <h3 style="font-size:14px; margin:16px 0 6px;">⚡ 自動起動の設定手順</h3>
           <ol class="steps-list">
+            <li><strong>Android (Edge / Firefox 等) の場合：</strong> ブラウザの拡張機能から「<strong>Tampermonkey</strong>」を入れ、上のボタンから保存した <code>jobcan-mobile.user.js</code> をTampermonkeyの「ダッシュボード」→「ユーティリティ」→「ファイルからインポート」で読み込ませます。</li>
             <li><strong>iPhone (Safari) の場合：</strong> App Store で無料の拡張機能アプリ「<strong>Userscripts</strong>」または「<strong>Stay</strong>」を入れ、上の <code>jobcan-mobile.user.js</code> を読み込ませます。</li>
-            <li><strong>Android の場合：</strong> 拡張機能対応ブラウザ（<strong>Firefox</strong> や <strong>Edge</strong>、<strong>Kiwi Browser</strong> 等）に「<strong>Tampermonkey</strong>」アドオンを入れ、スクリプトを追加します。</li>
-            <li><strong>PC (Chrome / Edge) の場合：</strong> 拡張機能「<strong>Tampermonkey</strong>」または「<strong>Violentmonkey</strong>」を入れ、ダウンロードした <code>jobcan-mobile.user.js</code> をドラッグ＆ドロップするだけで完了です。</li>
+            <li><strong>PC (Chrome / Edge) の場合：</strong> 拡張機能「<strong>Tampermonkey</strong>」または「<strong>Violentmonkey</strong>」を入れ、保存した <code>jobcan-mobile.user.js</code> をドラッグ＆ドロップ（またはファイルインポート）するだけで完了です。</li>
           </ol>
         </div>
       </section>
@@ -705,25 +711,11 @@
   </script>
 
   <script>
-    // Build Bookmarklet & Userscript on page load
+    // Build Bookmarklet & Userscript on page load (100% self-contained)
     const rawCore = document.getElementById('jobcan-core-script').textContent.trim();
     const bookmarkletUrl = 'javascript:' + encodeURIComponent(rawCore);
     document.getElementById('bookmarklet-link').href = bookmarkletUrl;
     document.getElementById('bookmarklet-code').value = bookmarkletUrl;
-
-    function switchInstallTab(tab) {
-      document.getElementById('tab-btn-bm').classList.toggle('active', tab === 'bm');
-      document.getElementById('tab-btn-us').classList.toggle('active', tab === 'us');
-      document.getElementById('method-bm').style.display = tab === 'bm' ? 'block' : 'none';
-      document.getElementById('method-us').style.display = tab === 'us' ? 'block' : 'none';
-    }
-
-    function copyBookmarklet() {
-      navigator.clipboard.writeText(bookmarkletUrl);
-      const t = document.getElementById('copy-toast');
-      t.style.display = 'block';
-      setTimeout(() => t.style.display = 'none', 4000);
-    }
 
     function getUserscriptText() {
       return [
@@ -742,14 +734,33 @@
       ].join('\n');
     }
 
-    function downloadUserscript() {
-      const blob = new Blob([getUserscriptText()], { type: 'text/javascript;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'jobcan-mobile.user.js';
-      a.click();
-      URL.revokeObjectURL(url);
+    // Encode UTF-8 string to Base64 data:application/javascript URL
+    // Using data:application/javascript;base64 (without ;charset=utf-8) ensures Android Edge/Chrome
+    // preserves the .js filename and registers the file as a proper JS file even from local HTML files.
+    function toBase64Utf8(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    const userscriptDataUrl = 'data:application/javascript;base64,' + toBase64Utf8(getUserscriptText());
+    document.getElementById('dl-userscript-link').href = userscriptDataUrl;
+
+    function switchInstallTab(tab) {
+      document.getElementById('tab-btn-bm').classList.toggle('active', tab === 'bm');
+      document.getElementById('tab-btn-us').classList.toggle('active', tab === 'us');
+      document.getElementById('method-bm').style.display = tab === 'bm' ? 'block' : 'none';
+      document.getElementById('method-us').style.display = tab === 'us' ? 'block' : 'none';
+    }
+
+    function copyBookmarklet() {
+      navigator.clipboard.writeText(bookmarkletUrl);
+      const t = document.getElementById('copy-toast');
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 4000);
     }
 
     function copyRawScript() {
